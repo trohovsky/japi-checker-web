@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 26, 2013 2:04:46 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.fedoraproject.japi.checker.web.model.ReleasesComparison" table="releases_comparison" catalog="`japi-checker-web`">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="referenceRelease" class="org.fedoraproject.japi.checker.web.model.Release" fetch="select">
+            <column name="reference_release_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="newRelease" class="org.fedoraproject.japi.checker.web.model.Release" fetch="select">
+            <column name="new_release_id" not-null="true" />
+        </many-to-one>
+        <bag name="differences" table="difference" inverse="true" fetch="select" lazy="false" cascade="save-update, delete">
+            <key>
+                <column name="releases_comparison_id" not-null="true" />
+            </key>
+            <one-to-many class="org.fedoraproject.japi.checker.web.model.Difference" />
+        </bag>
+    </class>
+</hibernate-mapping>

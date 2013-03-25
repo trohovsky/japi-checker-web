@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 26, 2013 2:04:46 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping default-access="field">
+    <class name="org.fedoraproject.japi.checker.web.model.Difference" table="difference" catalog="`japi-checker-web`">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <!-- <discriminator column="element_type" type="string" /> -->
+        <many-to-one name="releasesComparison" class="org.fedoraproject.japi.checker.web.model.ReleasesComparison" fetch="select">
+            <column name="releases_comparison_id" not-null="true" />
+        </many-to-one>
+        <!-- <property name="reference" type="string">
+            <column name="reference" not-null="true" />
+        </property> -->
+        <!-- ANY mapping ignores lazy="false" https://hibernate.atlassian.net/browse/HHH-3574 -->
+        <any name="referenceItem" meta-type="string" id-type="int" lazy="false" access="property">
+            <meta-value value="C" class="org.fedoraproject.japi.checker.web.model.Class"/>            
+            <meta-value value="F" class="org.fedoraproject.japi.checker.web.model.Field"/>
+            <meta-value value="M" class="org.fedoraproject.japi.checker.web.model.Method"/>
+            <column name="element_type" not-null="true"/>
+            <column name="reference_id" not-null="true"/>
+        </any>
+        <!-- <property name="new_" type="string">
+            <column name="new" not-null="true" />
+        </property> -->
+        <any name="newItem" meta-type="string" id-type="int" lazy="false">
+            <meta-value value="C" class="org.fedoraproject.japi.checker.web.model.Class"/>            
+            <meta-value value="F" class="org.fedoraproject.japi.checker.web.model.Field"/>
+            <meta-value value="M" class="org.fedoraproject.japi.checker.web.model.Method"/>
+            <column name="new_element_type" not-null="true"/>
+            <column name="new_id" not-null="true"/>
+        </any>
+        <property name="differenceType">
+            <column name="difference_type" not-null="true" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.googlecode.japi.checker.DifferenceType</param>
+            </type>
+        </property>
+        <array name="args" table="argument" fetch="select" cascade="save-update, delete">
+            <key>
+                <column name="difference_id" not-null="true" />
+            </key>
+            <list-index column="list_index"/>
+            <element column="value" type="string"/> 
+        </array>
+    </class>
+</hibernate-mapping>

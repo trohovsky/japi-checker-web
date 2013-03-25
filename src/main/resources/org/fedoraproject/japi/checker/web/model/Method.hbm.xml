@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 26, 2013 2:04:46 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping default-access="field">
+    <class name="org.fedoraproject.japi.checker.web.model.Method" table="method" catalog="`japi-checker-web`" discriminator-value="MET">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="owner" class="org.fedoraproject.japi.checker.web.model.Class" fetch="select">
+            <column name="class_id" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="access" type="int" access="property">
+            <column name="access" not-null="true" />
+        </property>
+        <property name="descriptor" type="string">
+            <column name="descriptor" not-null="true" />
+        </property>
+        <property name="defaultValue" type="string">
+            <column name="value" />
+        </property>
+        <property name="line" type="java.lang.Integer">
+            <column name="line" />
+        </property>
+        <bag name="typeParameters" table="type_parameter" lazy="false" fetch="select" cascade="save-update, delete">
+            <key>
+                <column name="method_id" />
+            </key>
+            <one-to-many class="org.fedoraproject.japi.checker.web.model.TypeParameter" />
+        </bag>
+        <list name="exceptions" table="throwing_exception" lazy="false" fetch="select" cascade="save-update, delete">
+            <key>
+                <column name="method_id" not-null="true" />
+            </key>
+            <list-index column="list_index"/>
+            <element column="name" type="string"/>
+        </list>
+    </class>
+</hibernate-mapping>

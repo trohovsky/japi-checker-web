@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 26, 2013 2:04:46 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping default-access="field">
+    <class name="org.fedoraproject.japi.checker.web.model.TypeParameter" table="type_parameter" catalog="`japi-checker-web`">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <!-- <many-to-one name="method" class="org.fedoraproject.japi.checker.web.model.Method" fetch="select">
+            <column name="method_id" />
+        </many-to-one>
+        <many-to-one name="clazz" class="org.fedoraproject.japi.checker.web.model.Class" fetch="select">
+            <column name="class_id" />
+        </many-to-one> -->
+        <property name="name" type="string">
+            <column name="name" length="45" not-null="true" />
+        </property>
+        <list name="bounds" table="type_parameter_bound" lazy="false" fetch="select" cascade="save-update, delete">
+            <key>
+                <column name="type_parameter_id" not-null="true" />
+            </key>
+            <list-index column="list_index"/>
+            <element column="name" type="string"/>
+        </list>
+    </class>
+</hibernate-mapping>
