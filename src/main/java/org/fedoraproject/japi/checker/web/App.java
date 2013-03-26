@@ -12,6 +12,8 @@ import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
 import org.fedoraproject.japi.checker.web.persistence.HibernateUtil;
 import org.hibernate.Session;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.googlecode.japi.checker.BCChecker;
 import com.googlecode.japi.checker.Severity;
@@ -23,6 +25,24 @@ import com.googlecode.japi.checker.model.MethodData;
  */
 public class App
 {
+	// managers
+	private LibraryManager libraryManager;
+	private ReleaseManager releaseManager;
+	private ReleasesComparisonManager releasesComparisonManager;
+	
+	public App(ApplicationContext context) {
+		libraryManager = (LibraryManager) context.getBean("libraryManager");
+		releaseManager = (ReleaseManager) context.getBean("releaseManager");
+		releasesComparisonManager = (ReleasesComparisonManager) context.getBean("releasesComparisonManager");
+	}
+	
+    public static void main( String[] args )
+    {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("spring/applicationContext.xml");
+        App app = new App(context);
+        app.run(args);
+    }
+	
 	public Release parseAPI(Library library, String releaseName, File file) {
 		Release release = new Release(library, releaseName);
 		try {
@@ -68,11 +88,6 @@ public class App
 	
 	public void run(String[] args) {
 		
-		// managers
-		LibraryManager libraryManager = new LibraryManager();
-		ReleaseManager releaseManager = new ReleaseManager();
-		ReleasesComparisonManager releasesComparisonManager = new ReleasesComparisonManager();
-		
 		// creation of library, releases and comparison
 		Library library = libraryManager.findById(1);
 		if (library == null) {
@@ -104,11 +119,4 @@ public class App
         // printing of comparison
 		printReport(comparison);
 	}
-	
-    public static void main( String[] args )
-    {
-        System.out.println("Maven + Hibernate + MySQL");
-        App app = new App();
-        app.run(args);
-    }
 }
