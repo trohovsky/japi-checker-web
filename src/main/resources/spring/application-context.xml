@@ -8,7 +8,7 @@
         xsi:schemaLocation="
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-            "> <!-- http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd -->
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- ========================= RESOURCE DEFINITIONS ========================= -->
 
@@ -18,7 +18,7 @@
     <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
     <!-- (in this case, Hibernate-related settings for the sessionFactory definition below) -->
     <context:property-placeholder location="classpath:spring/data-access.properties"/>
-
+    
     <!-- Hibernate SessionFactory -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
             p:dataSource-ref="dataSource">
@@ -26,7 +26,6 @@
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-                <prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
                 <!-- <prop key="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</prop> -->
             </props>
         </property>
@@ -52,6 +51,9 @@
     <!--
     <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager"/>
     -->
+    
+    <!-- enables scanning for @Transactional annotations -->
+    <tx:annotation-driven />
 
 
     <!-- ========================= BUSINESS OBJECT DEFINITIONS ========================= -->
@@ -62,24 +64,15 @@
     -->
     <context:annotation-config/>
 
-    <!--
-        Instruct Spring to perform declarative transaction management
-        automatically on annotated classes.
-    -->
-    <!-- <tx:annotation-driven/> -->
-
-    <!--
-        Exporter that exposes the Hibernate statistics service via JMX. Autodetects the
-        service MBean, using its bean name as JMX object name.
-    -->
-    <context:mbean-export/>
-
-    <!-- Managers -->
-    <bean id="libraryManager" class="org.fedoraproject.japi.checker.web.dao.LibraryManager"/>
-    <bean id="releaseManager" class="org.fedoraproject.japi.checker.web.dao.ReleaseManager"/>
-    <bean id="releasesComparisonManager" class="org.fedoraproject.japi.checker.web.dao.ReleasesComparisonManager"/>
-
-    <!-- Hibernate's JMX statistics service -->
-    <bean name="japi-checker-web:type=HibernateStatistics" class="org.hibernate.jmx.StatisticsService" autowire="byName"/>
+    <!-- DAOs -->
+    <bean id="libraryDAO" class="org.fedoraproject.japi.checker.web.dao.impl.LibraryDAOImpl"/>
+    <bean id="releaseDAO" class="org.fedoraproject.japi.checker.web.dao.impl.ReleaseDAOImpl"/>
+    <bean id="releasesComparisonDAO" class="org.fedoraproject.japi.checker.web.dao.impl.ReleasesComparisonDAOImpl"/>
+    
+    <!-- Checker -->
+    <bean id="checker" class="com.googlecode.japi.checker.BCChecker" />
+    
+    <!-- Service -->
+    <bean id="checkerService" class="org.fedoraproject.japi.checker.web.service.CheckerServiceImpl"/>
 
 </beans>

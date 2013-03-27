@@ -11,8 +11,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.fedoraproject.japi.checker.web.dao.ReleaseManager;
-
 import com.googlecode.japi.checker.ClassDataLoader;
 import com.googlecode.japi.checker.JarReader;
 import com.googlecode.japi.checker.utils.AntPatternMatcher;
@@ -89,9 +87,8 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 
 	@Nullable
 	public Class fromName(String name) {
-		ReleaseManager releaseManager = new ReleaseManager();
-		Class result = releaseManager.findClassByName(id, name);
-		return result;
+		// TODO rework classes to Map and find class on the application level
+		return null;
 	}
 
 	@Nonnull
