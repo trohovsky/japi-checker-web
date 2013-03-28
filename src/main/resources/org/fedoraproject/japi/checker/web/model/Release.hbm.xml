@@ -26,11 +26,12 @@
             </key>
             <one-to-many class="org.fedoraproject.japi.checker.web.model.ReleasesComparison" />
         </set> -->
-        <bag name="classes" table="class" inverse="true" lazy="false" fetch="select" cascade="save-update, delete">
+        <map name="classes" table="class" inverse="true" lazy="false" fetch="select" cascade="save-update, delete">
             <key>
                 <column name="release_id" not-null="true" />
             </key>
+            <map-key type="string" column="name" />
             <one-to-many class="org.fedoraproject.japi.checker.web.model.Class" />
-        </bag>
+        </map>
     </class>
 </hibernate-mapping>

@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +29,7 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	private int id;
 	private Library library;
 	private String name;
-	private List<Class> classes = new ArrayList<Class>(0);
+	private Map<String, Class> classes = new LinkedHashMap<String, Class>();;
 
 	public Release() {
 	}
@@ -62,10 +64,10 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	}
 
 	public List<Class> getClasses() {
-		return this.classes;
+		return new ArrayList<Class>(classes.values());
 	}
 
-	public void setClasses(List<Class> classes) {
+	public void setClasses(Map<String, Class> classes) {
 		this.classes = classes;
 	}
 	
@@ -73,7 +75,10 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 		JarReader<Class> reader;
         reader = new JarReader<Class>(file, this, Class.class, Field.class, Method.class, TypeParameter.class);
         reader.read();
-        this.setClasses(reader.getClasses());
+        // convert list to map
+        for (Class clazz : reader.getClasses()) {
+        	this.classes.put(clazz.getName(), clazz);
+        }
 	}
 
 	// TODO this method is useless, try to use read(String file) instead
@@ -87,8 +92,7 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 
 	@Nullable
 	public Class fromName(String name) {
-		// TODO rework classes to Map and find class on the application level
-		return null;
+		return this.classes.get(name);
 	}
 
 	@Nonnull
