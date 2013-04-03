@@ -27,7 +27,7 @@ public class App
 	
     public static void main( String[] args )
     {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("spring/application-context.xml");
+    	ApplicationContext context = new ClassPathXmlApplicationContext("spring/business-config.xml");
         App app = new App(context);
         app.run(args);
     }
