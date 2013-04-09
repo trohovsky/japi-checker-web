@@ -3,7 +3,6 @@ package org.fedoraproject.japi.checker.web.service;
 import java.io.File;
 import java.util.List;
 
-import org.fedoraproject.japi.checker.web.model.Class;
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
@@ -16,6 +15,8 @@ public interface CheckerService {
 	public List<Library> findLibraries() throws DataAccessException;
 
 	public Library findLibraryById(int id) throws DataAccessException;
+	
+	public Library findLibraryWithReleasesById(int libraryId) throws DataAccessException;
 
 	public List<Library> findLibraryByName(String name)
 			throws DataAccessException;
@@ -36,12 +37,10 @@ public interface CheckerService {
 	public List<Release> findReleases() throws DataAccessException;
 
 	public Release findReleaseById(int id) throws DataAccessException;
+	
+	public Release findReleaseWithClassesById(int id) throws DataAccessException;
 
-	public List<Release> findReleaseByName(String name)
-			throws DataAccessException;
-
-	public Class findClassByName(int id, String name)
-			throws DataAccessException;
+	public List<Release> findReleaseByName(String name) throws DataAccessException;
 
 	public void deleteRelease(Release release);
 

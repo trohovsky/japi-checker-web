@@ -7,7 +7,6 @@ import java.util.List;
 import org.fedoraproject.japi.checker.web.dao.LibraryDAO;
 import org.fedoraproject.japi.checker.web.dao.ReleaseDAO;
 import org.fedoraproject.japi.checker.web.dao.ReleasesComparisonDAO;
-import org.fedoraproject.japi.checker.web.model.Class;
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
@@ -45,6 +44,10 @@ public class CheckerServiceImpl implements CheckerService {
 
 	public Library findLibraryById(int id) throws DataAccessException {
 		return libraryDAO.findById(id);
+	}
+	
+	public Library findLibraryWithReleasesById(int id) throws DataAccessException {
+		return libraryDAO.findWithReleasesById(id);
 	}
 
 	public List<Library> findLibraryByName(String name) throws DataAccessException {
@@ -86,13 +89,13 @@ public class CheckerServiceImpl implements CheckerService {
 	public Release findReleaseById(int id) throws DataAccessException {
 		return releaseDAO.findById(id);
 	}
+	
+	public Release findReleaseWithClassesById(int id) throws DataAccessException {
+		return releaseDAO.findWithClassesById(id);
+	}
 
 	public List<Release> findReleaseByName(String name) throws DataAccessException {
 		return releaseDAO.findByName(name);
-	}
-
-	public Class findClassByName(int id, String name) throws DataAccessException {
-		return releaseDAO.findClassByName(id, name);
 	}
 
 	public void deleteRelease(Release release) {

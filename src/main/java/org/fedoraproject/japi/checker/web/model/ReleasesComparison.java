@@ -18,7 +18,7 @@ public class ReleasesComparison implements java.io.Serializable, Reporter {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private Integer id;
 	private Release referenceRelease;
 	private Release newRelease;
 	private List<Difference> differences = new ArrayList<Difference>(0);
@@ -32,13 +32,17 @@ public class ReleasesComparison implements java.io.Serializable, Reporter {
 		this.newRelease = newRelease;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public boolean isNew() {
+        return (this.id == null);
+    }
 
 	public Release getReferenceRelease() {
 		return referenceRelease;

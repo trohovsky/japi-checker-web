@@ -14,7 +14,7 @@ public class Library implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private Integer id;
 	private String name;
 	private Set<Release> releases = new HashSet<Release>(0);
 
@@ -32,13 +32,17 @@ public class Library implements java.io.Serializable {
 		this.releases = releases;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public boolean isNew() {
+        return (this.id == null);
+    }
 
 	public String getName() {
 		return this.name;

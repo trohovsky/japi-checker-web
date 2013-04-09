@@ -11,6 +11,8 @@ public interface LibraryDAO {
 	public List<Library> findAll();
 
 	public Library findById(int id);
+	
+	public Library findWithReleasesById(int id);
 
 	public List<Library> findByName(String name);
 

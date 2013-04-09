@@ -26,7 +26,7 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private Integer id;
 	private Library library;
 	private String name;
 	private Map<String, Class> classes = new LinkedHashMap<String, Class>();;
@@ -39,13 +39,17 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 		this.name = name;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public boolean isNew() {
+        return (this.id == null);
+    }
 
 	public Library getLibrary() {
 		return this.library;
@@ -107,6 +111,11 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 			@Nonnull List<AntPatternMatcher> excludes) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
 	}
 
 }

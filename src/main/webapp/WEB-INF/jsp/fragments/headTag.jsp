@@ -12,7 +12,7 @@ Japi Checker Web
     <spring:url value="/webjars/bootstrap/2.3.1/css/bootstrap.min.css" var="bootstrapCss"/>
     <link href="${bootstrapCss}" rel="stylesheet"/>
 
-    <spring:url value="/resources/css/petclinic.css" var="petclinicCss"/>
+    <spring:url value="/resources/css/checker.css" var="petclinicCss"/>
     <link href="${petclinicCss}" rel="stylesheet"/>
 
     <spring:url value="/webjars/jquery/1.9.1/jquery.js" var="jQuery"/>

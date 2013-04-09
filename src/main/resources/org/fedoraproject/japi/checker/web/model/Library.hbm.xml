@@ -17,5 +17,8 @@
             </key>
             <one-to-many class="org.fedoraproject.japi.checker.web.model.Release" />
         </set>
+        <fetch-profile name="library-with-releases">
+            <fetch association="releases" style="join"/>
+        </fetch-profile>
     </class>
 </hibernate-mapping>

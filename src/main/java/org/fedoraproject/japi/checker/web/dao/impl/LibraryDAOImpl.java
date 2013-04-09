@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.fedoraproject.japi.checker.web.dao.LibraryDAO;
 import org.fedoraproject.japi.checker.web.model.Library;
+import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,7 @@ public class LibraryDAOImpl implements LibraryDAO {
 
 	// TODO rather use merge
 	public void save(Library library) {
-		sessionFactory.getCurrentSession().persist(library);
+		sessionFactory.getCurrentSession().saveOrUpdate(library);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -29,6 +31,13 @@ public class LibraryDAOImpl implements LibraryDAO {
 	
 	public Library findById(int id) {
 		return (Library) sessionFactory.getCurrentSession().get(Library.class, id);
+	}
+	
+	public Library findWithReleasesById(int id) {
+		return (Library) sessionFactory.getCurrentSession()
+				.createCriteria(Library.class)
+				.setFetchMode("releases", FetchMode.JOIN)
+				.add(Restrictions.idEq(id)).uniqueResult(); 
 	}
 
 	@SuppressWarnings("unchecked")

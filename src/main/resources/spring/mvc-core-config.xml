@@ -20,7 +20,7 @@
         - POJOs labeled with the @Controller and @Service annotations are auto-detected.
     -->
     <context:component-scan
-            base-package="org.fedoraproject.japi.checker.web.web"/>
+            base-package="org.fedoraproject.japi.checker.web.controller"/>
 
     <mvc:annotation-driven />  <!-- conversion-service="conversionService" -->
 
@@ -31,7 +31,14 @@
     <!-- uses WebJars so Javascript and CSS libs can be declared as Maven dependencies (Bootstrap, jQuery...) -->
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 
-    <mvc:view-controller path="/" view-name="welcome" />
+    <mvc:view-controller path="/help" view-name="help" />
+    <mvc:view-controller path="/help.html" view-name="help" />
+    
+    <!-- Configure the multipart resolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- the maximum file size in bytes, 10 MB should be enough-->
+        <property name="maxUploadSize" value="10485760"/>
+    </bean>
 
     <!--
         - Message source for this context, loaded from localized "messages_xx" files.

@@ -24,7 +24,7 @@
             <column name="access" not-null="true" />
         </property>
         <property name="superName" type="string">
-            <column name="superName" not-null="true" />
+            <column name="superName" />
         </property>
         <property name="source" type="string">
             <column name="source" not-null="true" />
