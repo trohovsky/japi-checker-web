@@ -24,13 +24,11 @@ public interface CheckerService {
 	public void deleteLibrary(Library library) throws DataAccessException;
 
 	/**
-	 * It parse API of JAR archive and returns it as a Release object.
-	 * @param library
-	 * @param releaseName
+	 * It parse API of JAR archive and to the given Release object.
+	 * @param release
 	 * @param file
-	 * @return parsed API as a Release object
 	 */
-	public Release parseAPI(Library library, String releaseName, File file);
+	public void parseAPI(Release release, File file);
 
 	public void saveRelease(Release release) throws DataAccessException;
 

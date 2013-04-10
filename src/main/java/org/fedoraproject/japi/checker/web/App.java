@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.googlecode.japi.checker.Severity;
-import com.googlecode.japi.checker.model.MethodData;
 
 
 /**
@@ -47,12 +46,14 @@ public class App
         
         Release reference = service.findReleaseById(1);
         if (reference == null) {
-        	reference = service.parseAPI(library, "testProject1", referenceArtifact);
+        	reference = new Release(library, "testProject1");
+        	service.parseAPI(reference, referenceArtifact);
             service.saveRelease(reference);
         }
         Release newRelease = service.findReleaseById(2);
         if (newRelease == null) {
-        	newRelease = service.parseAPI(library, "testProject2", newArtifact);
+        	newRelease = new Release(library, "testProject2"); 
+        	service.parseAPI(newRelease, newArtifact);
         	service.saveRelease(newRelease);
         }   
         
@@ -74,16 +75,4 @@ public class App
 			}
 		}
 	}
-	
-    private String getLine(Difference difference) {
-        if (difference.getNewItem() instanceof MethodData) {
-        	Integer lineNumber = ((MethodData)difference.getNewItem()).getLineNumber();
-        	if (lineNumber != null) {
-        		return "(" + lineNumber + ")";
-        	} else {
-        		return "";
-        	}
-        }
-        return "";
-    }
 }

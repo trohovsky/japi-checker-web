@@ -61,21 +61,16 @@ public class CheckerServiceImpl implements CheckerService {
 	/* Release operations */
 	
 	/**
-	 * It parse API of JAR archive and returns it as a Release object.
-	 * @param library
-	 * @param releaseName
+	 * It parse API of JAR archive and to the given Release object.
+	 * @param release
 	 * @param file
-	 * @return parsed API as a Release object
 	 */
-	public Release parseAPI(Library library, String releaseName, File file) {
-		Release release = new Release(library, releaseName);
+	public void parseAPI(Release release, File file) {
 		try {
 			release.read(file.toURI());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return release;
 	}
 	
 	public void saveRelease(Release release) throws DataAccessException {

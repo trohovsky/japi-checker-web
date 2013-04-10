@@ -8,6 +8,7 @@ import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.service.CheckerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,10 +29,15 @@ import org.springframework.web.servlet.ModelAndView;
 public class ReleaseController {
 	
 	private final CheckerService checkerService;
+	private TaskExecutor taskExecutor;
+	private static final String UPLOAD_PATH = "tmpJARs"; 
 
 	@Autowired
-	public ReleaseController(CheckerService checkerService) {
+	public ReleaseController(CheckerService checkerService, TaskExecutor taskExecutor) {
 		this.checkerService = checkerService;
+		this.taskExecutor = taskExecutor;
+		File tmpDir = new File(UPLOAD_PATH);
+		tmpDir.mkdirs();
 	}
 	
 	@InitBinder
@@ -52,6 +58,40 @@ public class ReleaseController {
 	public String processCreationForm(@PathVariable("libraryId") int libraryId,
 			@RequestParam("name") String name,
 			@RequestParam("file") MultipartFile file) {
+
+		// prepare release
+		Library library = checkerService.findLibraryById(libraryId);
+		Release release = new Release(library, name);
+		checkerService.saveRelease(release);
+
+		// get file name
+		String filename = getFilename(file);
+
+		// store file temporarily
+		File tmpFile = new File(UPLOAD_PATH + filename);
+		try {
+			tmpFile.createNewFile();
+			new FileOutputStream(tmpFile).write(file.getBytes());
+		} catch (IOException e) {
+			// delete prepared release
+			checkerService.deleteRelease(release);
+			tmpFile.delete();
+			// return;
+		}
+		
+		// parse and update release in thread
+		Thread uploadReleaseTask = new ReleaseCreationTask(release, tmpFile);
+		taskExecutor.execute(uploadReleaseTask);
+
+		return "redirect:/libraries/{libraryId}";
+    }
+
+	/**
+	 * It returns filename of MultipartFile.
+	 * @param file
+	 * @return
+	 */
+	private String getFilename(MultipartFile file) {
 		// filename parsing - it is necessary because getOriginalFilename() may return path in Opera, see. API
 		// http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/multipart/MultipartFile.html#transferTo%28java.io.File%29
 		int slashIndex = file.getOriginalFilename().lastIndexOf('/');
@@ -64,33 +104,42 @@ public class ReleaseController {
 		} else {
 			filename = file.getOriginalFilename().substring(slashIndex);
 		}
-		// store file temporarily
-		// TODO choose better destination than user's home
-		File tmpDir = new File("tmpJARs");
-		File tmpFile = new File("tmpJARs/" + filename);
-		try {
-			tmpDir.mkdir();
-			tmpFile.createNewFile();
-			new FileOutputStream(tmpFile).write(file.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
+		return filename;
+	}
+	
+	/**
+	 * Task class for a creation of release.
+	 */
+	class ReleaseCreationTask extends Thread {
+		private Release release;
+		private File tmpFile;
+		
+		public ReleaseCreationTask(Release release, File tmpFile) {
+			this.release = release;
+			this.tmpFile = tmpFile;
 		}
+		
+		@Override
+		public void run() {
+			
+			// parse API
+			//long parsingStart = System.nanoTime();
+			checkerService.parseAPI(release, tmpFile);
+			//double parsingDuration = (System.nanoTime() - parsingStart) * 1.0e-9;
+			
+			// store release
+			//long savingStart = System.nanoTime();
+			checkerService.saveRelease(release);
+			//double savingDuration = (System.nanoTime() - savingStart) * 1.0e-9;
+			
+			//System.out.println("parsing of API: " + parsingDuration);
+			//System.out.println("saving of API: " + savingDuration);
+			
+			// remove temporary file
+			tmpFile.delete();
 
-		// parse API
-		Library library = this.checkerService.findLibraryById(libraryId);
-		// TODO the arguments of this method can be reduced only to file.
-		// but file is also not nice, because this file is only on disc
-		Release release = this.checkerService.parseAPI(library, name, tmpFile);
-
-		// store release
-		this.checkerService.saveRelease(release);
-
-		// remove temporary file
-		tmpFile.delete();
-
-		// status.setComplete();
-		return "redirect:/libraries/{libraryId}";
-    }
+		}
+	}
 
     /*@RequestMapping(value = "/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
     public String processCreationForm(Release release, BindingResult result, SessionStatus status) { // TODO @Valid
