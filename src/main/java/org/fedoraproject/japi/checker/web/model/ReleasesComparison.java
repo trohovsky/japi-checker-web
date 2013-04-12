@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.googlecode.japi.checker.DifferenceType;
 import com.googlecode.japi.checker.Reporter;
+import com.googlecode.japi.checker.Severity;
 import com.googlecode.japi.checker.model.JavaItem;
 
 /**
@@ -77,6 +78,32 @@ public class ReleasesComparison implements java.io.Serializable, Reporter {
 			DifferenceType differenceType, Object... args) {
 		Difference difference = new Difference(this, referenceItem, newItem, differenceType, args);
 		differences.add(difference);		
+	}
+	
+	/**
+	 * It returns count of differences of specified severity and level of compatibility.
+	 * @param severity
+	 * @param reportSourceAffectingDifferences
+	 * @return count of differences of specified severity and level of compatibility
+	 */
+	public int getDifferencesCount(Severity severity, boolean reportSourceAffectingDifferences) {
+		if (severity == null && reportSourceAffectingDifferences) {
+			return differences.size();
+		} else {
+			int count = 0;
+			for (Difference difference : differences) {
+				if (difference.getDifferenceType().getSeverity() == severity) {
+					if (reportSourceAffectingDifferences || !difference.getDifferenceType().isSource()) {
+	            		count++;
+	            	}
+				}		
+			}
+			return count;
+		}
+	}
+
+	public boolean isCompatible() {
+		return getDifferencesCount(Severity.ERROR, true) == 0;
 	}
 
 }

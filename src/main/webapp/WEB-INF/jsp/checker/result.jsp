@@ -12,6 +12,26 @@
 <div class="container">
     <jsp:include page="../fragments/bodyHeader.jsp"/>
     
+        <div id="summary-container">
+            <dl class="dl-horizontal">
+                <dt>Errors:</dt>
+                <dd><c:out value="${comparison.getDifferencesCount('ERROR', true)}" /></dd>
+                <dt>Warnings:</dt>
+                <dd><c:out value="${comparison.getDifferencesCount('WARNING', true)}" /></dd>
+                <dt>Result:</dt>
+                <dd> 
+	                <c:choose>
+	                <c:when test="${comparison.isCompatible()}">
+	                    <span style="color: green">Compatible</span>
+	                </c:when>
+	                <c:otherwise>
+	                    <span style="color: red">Incompatible</span>
+	                </c:otherwise>
+	                </c:choose>
+                </dd>
+            </dl>
+        </div>
+    
         <datatables:table id="comparison" data="${comparison.differences}" cdn="true" row="difference" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false">
         <datatables:column title="severity">
