@@ -18,9 +18,9 @@ Japi Checker Web
     <spring:url value="/webjars/jquery/1.9.1/jquery.js" var="jQuery"/>
     <script src="${jQuery}"></script>
 
-    <spring:url value="/webjars/jquery-ui/1.10.2/js/jquery-ui-1.10.2.custom.js" var="jQueryUi"/>
+    <spring:url value="/webjars/jquery-ui/1.10.2/ui/jquery-ui.js" var="jQueryUi"/>
     <script src="${jQueryUi}"></script>
 
-    <spring:url value="/webjars/jquery-ui/1.10.2/css/smoothness/jquery-ui-1.10.2.custom.css" var="jQueryUiCss"/>
+    <spring:url value="/webjars/jquery-ui/1.10.2/themes/base/jquery-ui.css" var="jQueryUiCss"/>
     <link href="${jQueryUiCss}" rel="stylesheet"></link>
 </head>

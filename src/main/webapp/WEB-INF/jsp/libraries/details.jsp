@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="datatables" uri="http://github.com/dandelion/datatables" %>
@@ -42,6 +43,9 @@
                 <spring:param name="releaseId" value="${release.id}"/>
             </spring:url>
             <a href="${fn:escapeXml(releaseUrl)}"><c:out value="${release.name}"/></a>
+        </datatables:column>
+        <datatables:column title="Updated">
+            <fmt:formatDate value="${release.date}" type="both" pattern="dd-MM-yyyy" />
         </datatables:column>
     </datatables:table>
 

@@ -3,11 +3,16 @@ package org.fedoraproject.japi.checker.web.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.validation.Valid;
 
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.service.CheckerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,51 +44,58 @@ public class ReleaseController {
 		File tmpDir = new File(UPLOAD_PATH);
 		tmpDir.mkdirs();
 	}
-	
-	@InitBinder
+
+    @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
+        // date format displayed in form
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(
+                dateFormat, false));
     }
 	
 	@RequestMapping(value = "libraries/{libraryId}/releases/new", method = RequestMethod.GET)
     public String initCreationForm(@PathVariable("libraryId") int libraryId, Model model) {
-		//Library library = this.checkerService.findLibraryById(libraryId);
+		Library library = this.checkerService.findLibraryById(libraryId);
         Release release = new Release();
-        //release.setLibrary(library);
+        release.setLibrary(library);
         model.addAttribute(release);
         return "releases/createOrUpdate";
     }
 	
-	@RequestMapping(value = "/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
-	public String processCreationForm(@PathVariable("libraryId") int libraryId,
-			@RequestParam("name") String name,
-			@RequestParam("file") MultipartFile file) {
+    @RequestMapping(value = "/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
+    public String processCreationForm(
+            @Valid @ModelAttribute("release") Release release,
+            @RequestParam("file") MultipartFile file, BindingResult result,
+            SessionStatus status) {
+        if (result.hasErrors()) {
+            return "releases/createOrUpdate";
+        } else {
+            // save release
+            checkerService.saveRelease(release);
 
-		// prepare release
-		Library library = checkerService.findLibraryById(libraryId);
-		Release release = new Release(library, name);
-		checkerService.saveRelease(release);
+            // get file name
+            String filename = getFilename(file);
 
-		// get file name
-		String filename = getFilename(file);
+            // store file temporarily
+            File tmpFile = new File(UPLOAD_PATH + filename);
+            try {
+                tmpFile.createNewFile();
+                new FileOutputStream(tmpFile).write(file.getBytes());
+            } catch (IOException e) {
+                // delete saved release
+                checkerService.deleteRelease(release);
+                tmpFile.delete();
+                // return;
+            }
 
-		// store file temporarily
-		File tmpFile = new File(UPLOAD_PATH + filename);
-		try {
-			tmpFile.createNewFile();
-			new FileOutputStream(tmpFile).write(file.getBytes());
-		} catch (IOException e) {
-			// delete prepared release
-			checkerService.deleteRelease(release);
-			tmpFile.delete();
-			// return;
-		}
-		
-		// parse and update release in thread
-		Thread uploadReleaseTask = new ReleaseCreationTask(release, tmpFile);
-		taskExecutor.execute(uploadReleaseTask);
+            // parse API and update release in thread
+            Thread uploadReleaseTask = new ReleaseCreationTask(release, tmpFile);
+            taskExecutor.execute(uploadReleaseTask);
 
-		return "redirect:/libraries/{libraryId}";
+            status.setComplete();
+            return "redirect:/libraries/{libraryId}";
+        }
     }
 
 	/**
@@ -140,17 +152,6 @@ public class ReleaseController {
 
 		}
 	}
-
-    /*@RequestMapping(value = "/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
-    public String processCreationForm(Release release, BindingResult result, SessionStatus status) { // TODO @Valid
-        if (result.hasErrors()) {
-            return "releases/createOrUpdate";
-        } else {
-            this.checkerService.saveRelease(release);
-            status.setComplete();
-            return "redirect:/libraries/{libraryId}" + release.getId();
-        }
-    }*/
 
     @RequestMapping(value = "/libraries/*/releases/{releaseId}/edit", method = RequestMethod.GET)
     public String initUpdateForm(@PathVariable("releaseId") int releaseId, Model model) {

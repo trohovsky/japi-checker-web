@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="datatables" uri="http://github.com/dandelion/datatables" %>
@@ -20,6 +21,10 @@
         	<dt>Name</dt>
         	<dd><c:out value="${release.name}" /></dd>
     	</dl>
+    	<dl class="dl-horizontal">
+            <dt>Date</dt>
+            <dd><fmt:formatDate value="${release.date}" type="both" pattern="dd-MM-yyyy" /></dd>
+        </dl>
         <div class="form-actions">
             <spring:url value="{releaseId}/edit.html" var="editUrl">
                 <spring:param name="releaseId" value="${release.id}"/>

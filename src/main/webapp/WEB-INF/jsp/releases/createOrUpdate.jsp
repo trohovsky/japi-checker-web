@@ -12,6 +12,11 @@
 <jsp:include page="../fragments/headTag.jsp"/>
 
 <body>
+<script>
+    $(function () {
+        $("#date").datepicker({ dateFormat: 'dd-mm-yy'});
+    });
+</script>
 <div class="container">
     <jsp:include page="../fragments/bodyHeader.jsp"/>
     <c:choose>
@@ -29,8 +34,15 @@
         <div class="control-group">
             <label class="control-label" for="name">Name</label>
             <div class="controls">
-                <input type="text" name="name" value="${release.name}"/>
+                <form:input path="name"/>
                 <form:errors path="name"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="date">Date</label>
+            <div class="controls">
+                <form:input path="date"/>
+                <form:errors path="date"/>
             </div>
         </div>
         <c:if test="${release['new']}">

@@ -14,18 +14,9 @@
         <property name="name" type="string">
             <column name="name" length="45" not-null="true" unique="true" />
         </property>
-        <!-- <set name="releasesComparisonsForNewReleaseId" table="releases_comparison" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="new_release_id" not-null="true" />
-            </key>
-            <one-to-many class="org.fedoraproject.japi.checker.web.model.ReleasesComparison" />
-        </set>
-        <set name="releasesComparisonsForReferenceReleaseId" table="releases_comparison" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="reference_release_id" not-null="true" />
-            </key>
-            <one-to-many class="org.fedoraproject.japi.checker.web.model.ReleasesComparison" />
-        </set> -->
+        <property name="date" type="date">
+            <column name="date" not-null="true" />
+        </property>
         <map name="classes" table="class" inverse="true" lazy="true" fetch="select" cascade="save-update, delete">
             <key>
                 <column name="release_id" not-null="true" />

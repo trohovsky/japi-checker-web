@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	private Library library;
 	@NotEmpty
 	private String name;
+	//@DateTimeFormat(pattern = "dd-MM-yyyy")
+	private Date date;
 	private Map<String, Class> classes = new LinkedHashMap<String, Class>();;
 
 	public Release() {
@@ -69,6 +72,14 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Date getDate() {
+		return this.date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}	
 
 	public List<Class> getClasses() {
 		return new ArrayList<Class>(classes.values());
