@@ -2,6 +2,8 @@ package org.fedoraproject.japi.checker.web.controller;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.service.CheckerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class LibraryController {
     }
 
     @RequestMapping(value = "/libraries/new", method = RequestMethod.POST)
-    public String processCreationForm(Library library, BindingResult result, SessionStatus status) { // TODO @Valid
+    public String processCreationForm(@Valid Library library, BindingResult result, SessionStatus status) { // TODO @Valid
         if (result.hasErrors()) {
             return "libraries/createOrUpdate";
         } else {

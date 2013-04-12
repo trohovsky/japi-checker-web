@@ -6,7 +6,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-
 <html lang="en">
 
 <jsp:include page="../fragments/headTag.jsp"/>
@@ -30,6 +29,7 @@
         	<label class="control-label" for="name">Name</label>
         	<div class="controls">
         		<input type="text" name="name" value="${library.name}"/>
+        		<form:errors path="name"/>
   	      	</div>
         </div>
 

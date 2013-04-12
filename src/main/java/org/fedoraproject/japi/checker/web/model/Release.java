@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.googlecode.japi.checker.ClassDataLoader;
 import com.googlecode.japi.checker.JarReader;
 import com.googlecode.japi.checker.utils.AntPatternMatcher;
@@ -28,6 +30,7 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private Library library;
+	@NotEmpty
 	private String name;
 	private Map<String, Class> classes = new LinkedHashMap<String, Class>();;
 

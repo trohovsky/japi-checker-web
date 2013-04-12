@@ -26,9 +26,20 @@
         </c:choose>
     </h2>
     <form:form modelAttribute="release" method="${method}" enctype="multipart/form-data" class="form-horizontal" id="add-release-form">
-        Name: <input type="text" name="name" value="${release.name}"/>
+        <div class="control-group">
+            <label class="control-label" for="name">Name</label>
+            <div class="controls">
+                <input type="text" name="name" value="${release.name}"/>
+                <form:errors path="name"/>
+            </div>
+        </div>
         <c:if test="${release['new']}">
-        JAR archive: <input type="file" name="file"/>
+        <div class="control-group">    
+            <label class="control-label" for="file">JAR archive</label>
+            <div class="controls">
+                <input type="file" name="file"/>
+            </div>
+        </div>
         </c:if>
 
         <div class="form-actions">
