@@ -30,6 +30,10 @@
                 <spring:param name="releaseId" value="${release.id}"/>
             </spring:url>
             <a href="${fn:escapeXml(editUrl)}" class="btn btn-info"><i class="icon-pencil icon-white"></i> Edit Release</a>
+            <spring:url value="{releaseId}/delete.html" var="deleteUrl">
+                <spring:param name="releaseId" value="${release.id}"/>
+            </spring:url>
+            <a href="${fn:escapeXml(deleteUrl)}" class="btn btn-danger"><i class="icon-remove-sign icon-white"></i> Remove Release</a>
     	</div>
     </div>
 

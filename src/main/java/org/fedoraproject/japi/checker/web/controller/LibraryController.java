@@ -123,4 +123,10 @@ public class LibraryController {
         return mav;
     }
 
+	@RequestMapping(value = "/libraries/{libraryId}/delete", method = RequestMethod.GET)
+	public String delete(@PathVariable("libraryId") int libraryId) {
+	    Library library = this.checkerService.findLibraryById(libraryId);
+	    this.checkerService.deleteLibrary(library);
+	    return "redirect:/libraries";
+	}
 }

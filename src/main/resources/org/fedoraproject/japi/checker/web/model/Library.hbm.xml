@@ -11,7 +11,7 @@
         <property name="name" type="string">
             <column name="name" length="45" not-null="true" unique="true" />
         </property>
-        <set name="releases" table="release" inverse="true" lazy="true" fetch="select">
+        <set name="releases" table="release" inverse="true" lazy="true" fetch="select" cascade="save-update, delete">
             <key>
                 <column name="library_id" not-null="true" />
             </key>

@@ -30,6 +30,10 @@
                 <spring:param name="libraryId" value="${library.id}"/>
             </spring:url>
             <a href="${fn:escapeXml(addUrl)}" class="btn btn-success"><i class="icon-plus icon-white"></i> Add New Release</a>
+            <spring:url value="{libraryId}/delete.html" var="deleteUrl">
+                <spring:param name="libraryId" value="${library.id}"/>
+            </spring:url>
+            <a href="${fn:escapeXml(deleteUrl)}" class="btn btn-danger"><i class="icon-remove-sign icon-white"></i> Remove Library</a>
     	</div>
     </div>
 

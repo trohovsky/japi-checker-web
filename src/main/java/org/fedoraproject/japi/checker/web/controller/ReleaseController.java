@@ -183,4 +183,11 @@ public class ReleaseController {
         mav.addObject(this.checkerService.findReleaseById(releaseId));
         return mav;
     }
+	
+	@RequestMapping(value = "/libraries/{libraryId}/releases/{releaseId}/delete", method = RequestMethod.GET)
+    public String delete(@PathVariable("releaseId") int releaseId) {
+        Release release = this.checkerService.findReleaseById(releaseId);
+        this.checkerService.deleteRelease(release);
+        return "redirect:/libraries/{libraryId}";
+    }
 }
