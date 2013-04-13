@@ -16,7 +16,7 @@
             <column name="reference" not-null="true" />
         </property> -->
         <!-- ANY mapping ignores lazy="false" https://hibernate.atlassian.net/browse/HHH-3574 -->
-        <any name="referenceItem" meta-type="string" id-type="int" lazy="false" access="property">
+        <any name="referenceItem" meta-type="string" id-type="int" lazy="true" access="property">
             <meta-value value="C" class="org.fedoraproject.japi.checker.web.model.Class"/>            
             <meta-value value="F" class="org.fedoraproject.japi.checker.web.model.Field"/>
             <meta-value value="M" class="org.fedoraproject.japi.checker.web.model.Method"/>
@@ -26,7 +26,7 @@
         <!-- <property name="new_" type="string">
             <column name="new" not-null="true" />
         </property> -->
-        <any name="newItem" meta-type="string" id-type="int" lazy="false">
+        <any name="newItem" meta-type="string" id-type="int" lazy="true">
             <meta-value value="C" class="org.fedoraproject.japi.checker.web.model.Class"/>            
             <meta-value value="F" class="org.fedoraproject.japi.checker.web.model.Field"/>
             <meta-value value="M" class="org.fedoraproject.japi.checker.web.model.Method"/>

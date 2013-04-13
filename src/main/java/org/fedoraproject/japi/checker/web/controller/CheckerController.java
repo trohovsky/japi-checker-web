@@ -40,10 +40,15 @@ public class CheckerController {
 			BindingResult result, SessionStatus status, Model model) {
 		if (result.hasErrors()) {
 			return "";
-		} else {			
-			Release reference = this.checkerService.findReleaseWithClassesById(checkingForm.getReferenceId());
-			Release newRelease = this.checkerService.findReleaseWithClassesById(checkingForm.getNewId());
-			ReleasesComparison comparison = this.checkerService.checkBackwardCompatibility(reference, newRelease);
+		} else {
+		    int referenceId = checkingForm.getReferenceId();
+		    int newId = checkingForm.getNewId();
+		    ReleasesComparison comparison = this.checkerService.findReleasesComparison(referenceId, newId);
+		    if (comparison == null) {
+		        Release reference = this.checkerService.findReleaseWithClassesById(checkingForm.getReferenceId());
+		        Release newRelease = this.checkerService.findReleaseWithClassesById(checkingForm.getNewId());
+		        comparison = this.checkerService.checkBackwardCompatibility(reference, newRelease);
+		    }
 			model.addAttribute("comparison", comparison);
 			status.setComplete();
 			return "checker/result";

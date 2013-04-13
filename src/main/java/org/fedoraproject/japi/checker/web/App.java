@@ -57,7 +57,7 @@ public class App
         	service.saveRelease(newRelease);
         }   
         
-        ReleasesComparison comparison = service.findReleasesComparisonById(1);
+        ReleasesComparison comparison = service.findReleasesComparison(1, 2);
         if (comparison == null) {
         	comparison = service.checkBackwardCompatibility(reference, newRelease);
             service.saveReleasesComparison(comparison);

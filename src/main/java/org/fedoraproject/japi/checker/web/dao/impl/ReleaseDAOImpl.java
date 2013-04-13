@@ -7,6 +7,7 @@ import org.fedoraproject.japi.checker.web.model.Release;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -39,6 +40,15 @@ public class ReleaseDAOImpl implements ReleaseDAO {
 				.setFetchMode("classes", FetchMode.JOIN)
 				.add(Restrictions.idEq(id)).uniqueResult(); 
 	}
+
+    public Release findPrevious(Release release) {
+        return (Release) sessionFactory.getCurrentSession()
+                .createCriteria(Release.class)
+                .setFetchMode("classes", FetchMode.JOIN)
+                .add(Restrictions.lt("date", release.getDate()))
+                .add(Restrictions.eq("library", release.getLibrary()))
+                .addOrder(Order.desc("date")).uniqueResult();
+    }
 
 	@SuppressWarnings("unchecked")
 	public List<Release> findByName(String name) {

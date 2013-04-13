@@ -10,7 +10,7 @@ public interface ReleasesComparisonDAO {
 
 	public List<ReleasesComparison> findAll();
 
-	public ReleasesComparison findById(int id);
+	public ReleasesComparison findByReleasesIds(int referenceId, int newId);
 
 	public void delete(ReleasesComparison persistentInstance);
 

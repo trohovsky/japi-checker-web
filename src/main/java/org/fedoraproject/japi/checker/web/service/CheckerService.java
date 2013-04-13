@@ -51,7 +51,8 @@ public interface CheckerService {
 	public List<ReleasesComparison> findReleasesComparisons()
 			throws DataAccessException;
 
-	public ReleasesComparison findReleasesComparisonById(int id) throws DataAccessException;
+	public ReleasesComparison findReleasesComparison(int referenceId, int newId)
+	        throws DataAccessException;
 
 	public void deleteReleasesComparison(ReleasesComparison releasesComparison)
 			throws DataAccessException;

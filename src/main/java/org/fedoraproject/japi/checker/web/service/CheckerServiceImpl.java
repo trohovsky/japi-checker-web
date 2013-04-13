@@ -75,6 +75,13 @@ public class CheckerServiceImpl implements CheckerService {
 	
 	public void saveRelease(Release release) throws DataAccessException {
 		releaseDAO.save(release);
+		if (!release.getClasses().isEmpty()) {
+		    Release previousRelease = releaseDAO.findPrevious(release);
+		    if (previousRelease != null) {
+		        ReleasesComparison comparison = checkBackwardCompatibility(previousRelease, release);
+		        releasesComparisonDAO.save(comparison);
+		    }
+		}
 	}
 
 	public List<Release> findReleases() throws DataAccessException {
@@ -95,6 +102,7 @@ public class CheckerServiceImpl implements CheckerService {
 
 	public void deleteRelease(Release release) {
 		releaseDAO.delete(release);
+		// TODO remove comparison and create new
 	}
 	
 	/* ReleasesComparison operations */
@@ -113,8 +121,8 @@ public class CheckerServiceImpl implements CheckerService {
 		return releasesComparisonDAO.findAll();
 	}
 
-	public ReleasesComparison findReleasesComparisonById(int id) throws DataAccessException {
-		return releasesComparisonDAO.findById(id);
+	public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException {
+		return releasesComparisonDAO.findByReleasesIds(referenceId, newId);
 	}
 
 	public void deleteReleasesComparison(ReleasesComparison releasesComparison) throws DataAccessException {

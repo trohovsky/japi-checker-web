@@ -11,8 +11,10 @@ public interface ReleaseDAO {
 	public List<Release> findAll();
 
 	public Release findById(int id);
-	
+
 	public Release findWithClassesById(int id);
+	
+	public Release findPrevious(Release release);
 
 	public List<Release> findByName(String name);
 
