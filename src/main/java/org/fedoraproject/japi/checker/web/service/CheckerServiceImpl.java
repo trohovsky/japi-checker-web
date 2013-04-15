@@ -2,6 +2,7 @@ package org.fedoraproject.japi.checker.web.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.fedoraproject.japi.checker.web.dao.LibraryDAO;
@@ -15,6 +16,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.japi.checker.BCChecker;
+import com.googlecode.japi.checker.Severity;
 
 @Service
 public class CheckerServiceImpl implements CheckerService {
@@ -75,6 +77,7 @@ public class CheckerServiceImpl implements CheckerService {
 	
 	public void saveRelease(Release release) throws DataAccessException {
 		releaseDAO.save(release);
+		// classes are empty only when release is uploaded 
 		if (!release.getClasses().isEmpty()) {
 		    Release previousRelease = releaseDAO.findPrevious(release);
 		    if (previousRelease != null) {
@@ -101,8 +104,14 @@ public class CheckerServiceImpl implements CheckerService {
 	}
 
 	public void deleteRelease(Release release) {
+	    Release previousRelease = releaseDAO.findPrevious(release);
+	    Release nextRelease = releaseDAO.findNext(release);
+	    // delete comparison and create new
 		releaseDAO.delete(release);
-		// TODO remove comparison and create new
+		if (previousRelease != null && nextRelease != null) {
+		    ReleasesComparison comparison = checkBackwardCompatibility(previousRelease, nextRelease);
+		    releasesComparisonDAO.save(comparison);
+		}
 	}
 	
 	/* ReleasesComparison operations */
@@ -110,6 +119,8 @@ public class CheckerServiceImpl implements CheckerService {
 	public ReleasesComparison checkBackwardCompatibility(Release reference, Release newRelease) {
 		ReleasesComparison comparison = new ReleasesComparison(reference, newRelease);
 		checker.checkBackwardCompatibility(comparison, reference.getClasses(), newRelease.getClasses());
+		// set compatibility info
+		comparison.setCompatible(comparison.getDifferencesCount(Severity.ERROR, true) == 0);
 		return comparison;
 	}
 	
@@ -117,9 +128,15 @@ public class CheckerServiceImpl implements CheckerService {
 		releasesComparisonDAO.save(releasesComparison);
 	}
 
-	public List<ReleasesComparison> findReleasesComparisons() throws DataAccessException {
-		return releasesComparisonDAO.findAll();
-	}
+	public List<ReleasesComparison> findReleasesComparisonsByLibrary(Library library) throws DataAccessException {
+        List<Integer> ids = new ArrayList<Integer>();
+        // get ids
+        for (Release release : library.getReleases()) {
+            ids.add(release.getId());
+        }
+
+        return releasesComparisonDAO.findByReleasesIds(ids);
+    }
 
 	public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException {
 		return releasesComparisonDAO.findByReleasesIds(referenceId, newId);

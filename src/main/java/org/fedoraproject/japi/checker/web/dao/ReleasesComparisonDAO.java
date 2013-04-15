@@ -8,7 +8,7 @@ public interface ReleasesComparisonDAO {
 
 	public void save(ReleasesComparison releaseComparison);
 
-	public List<ReleasesComparison> findAll();
+	public List<ReleasesComparison> findByReleasesIds(List<Integer> ids);
 
 	public ReleasesComparison findByReleasesIds(int referenceId, int newId);
 

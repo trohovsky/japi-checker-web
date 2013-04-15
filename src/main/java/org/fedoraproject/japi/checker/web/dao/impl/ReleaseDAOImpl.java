@@ -41,13 +41,29 @@ public class ReleaseDAOImpl implements ReleaseDAO {
 				.add(Restrictions.idEq(id)).uniqueResult(); 
 	}
 
+    // TODO need rewrite, currently it makes fetching overload because of 
+    // eager loading of classes per every release
+	@SuppressWarnings("unchecked")
     public Release findPrevious(Release release) {
-        return (Release) sessionFactory.getCurrentSession()
+         List<Release> releases = sessionFactory.getCurrentSession()
                 .createCriteria(Release.class)
                 .setFetchMode("classes", FetchMode.JOIN)
                 .add(Restrictions.lt("date", release.getDate()))
                 .add(Restrictions.eq("library", release.getLibrary()))
-                .addOrder(Order.desc("date")).uniqueResult();
+                .addOrder(Order.desc("date")).list();
+         return (releases.isEmpty() ? null : releases.get(0));
+    }
+    
+	// TODO same as for findPrevious
+    @SuppressWarnings("unchecked")
+    public Release findNext(Release release) {
+        List<Release> releases = sessionFactory.getCurrentSession()
+                .createCriteria(Release.class)
+                .setFetchMode("classes", FetchMode.JOIN)
+                .add(Restrictions.gt("date", release.getDate()))
+                .add(Restrictions.eq("library", release.getLibrary()))
+                .addOrder(Order.asc("date")).list();
+        return (releases.isEmpty() ? null : releases.get(0));
     }
 
 	@SuppressWarnings("unchecked")

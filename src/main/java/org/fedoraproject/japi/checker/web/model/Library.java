@@ -2,8 +2,8 @@ package org.fedoraproject.japi.checker.web.model;
 
 // Generated Feb 27, 2013 2:23:31 PM by Hibernate Tools 3.4.0.CR1
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -19,20 +19,9 @@ public class Library implements java.io.Serializable {
 	private Integer id;
 	@NotEmpty
 	private String name;
-	private Set<Release> releases = new HashSet<Release>(0);
+	private List<Release> releases = new ArrayList<Release>(0);
 
 	public Library() {
-	}
-
-	public Library(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public Library(int id, String name, Set<Release> releases) {
-		this.id = id;
-		this.name = name;
-		this.releases = releases;
 	}
 
 	public Integer getId() {
@@ -55,11 +44,11 @@ public class Library implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public Set<Release> getReleases() {
+	public List<Release> getReleases() {
 		return this.releases;
 	}
 
-	public void setReleases(Set<Release> releases) {
+	public void setReleases(List<Release> releases) {
 		this.releases = releases;
 	}
 

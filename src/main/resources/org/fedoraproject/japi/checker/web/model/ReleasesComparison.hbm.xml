@@ -14,7 +14,10 @@
         <many-to-one name="newRelease" class="org.fedoraproject.japi.checker.web.model.Release" fetch="select">
             <column name="new_release_id" not-null="true" />
         </many-to-one>
-        <bag name="differences" table="difference" inverse="true" fetch="select" lazy="false" cascade="all">
+        <property name="compatible" type="boolean">
+            <column name="compatible"></column>
+        </property>
+        <bag name="differences" table="difference" inverse="true" fetch="select" lazy="true" cascade="all">
             <key>
                 <column name="releases_comparison_id" not-null="true" />
             </key>

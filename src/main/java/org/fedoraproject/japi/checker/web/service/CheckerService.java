@@ -48,7 +48,14 @@ public interface CheckerService {
 	public void saveReleasesComparison(ReleasesComparison releasesComparison)
 			throws DataAccessException;
 
-	public List<ReleasesComparison> findReleasesComparisons()
+	/**
+	 * It find comparison by library. Library has to has initialized releases 
+	 * (i.e. loaded by findWithReleasesById(int id)).
+	 * @param library
+	 * @return
+	 * @throws DataAccessException
+	 */
+	public List<ReleasesComparison> findReleasesComparisonsByLibrary(Library library)
 			throws DataAccessException;
 
 	public ReleasesComparison findReleasesComparison(int referenceId, int newId)
