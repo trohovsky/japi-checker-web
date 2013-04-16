@@ -141,6 +141,16 @@ public class CheckerServiceImpl implements CheckerService {
 	public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException {
 		return releasesComparisonDAO.findByReleasesIds(referenceId, newId);
 	}
+	
+	public ReleasesComparison getReleasesComparison(int referenceId, int newId) {
+        ReleasesComparison comparison = this.findReleasesComparison(referenceId, newId);
+        if (comparison == null) {
+            Release reference = this.findReleaseWithClassesById(referenceId);
+            Release newRelease = this.findReleaseWithClassesById(newId);
+            comparison = this.checkBackwardCompatibility(reference, newRelease);
+        }
+        return comparison;
+    }
 
 	public void deleteReleasesComparison(ReleasesComparison releasesComparison) throws DataAccessException {
 		releasesComparisonDAO.delete(releasesComparison);

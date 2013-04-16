@@ -1,7 +1,9 @@
 package org.fedoraproject.japi.checker.web.controller;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
 import org.fedoraproject.japi.checker.web.service.CheckerService;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
@@ -43,16 +46,45 @@ public class CheckerController {
 		} else {
 		    int referenceId = checkingForm.getReferenceId();
 		    int newId = checkingForm.getNewId();
-		    ReleasesComparison comparison = this.checkerService.findReleasesComparison(referenceId, newId);
-		    if (comparison == null) {
-		        Release reference = this.checkerService.findReleaseWithClassesById(checkingForm.getReferenceId());
-		        Release newRelease = this.checkerService.findReleaseWithClassesById(checkingForm.getNewId());
-		        comparison = this.checkerService.checkBackwardCompatibility(reference, newRelease);
-		    }
+		    ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
 			model.addAttribute("comparison", comparison);
 			status.setComplete();
 			return "checker/result";
 		}
-	}
+	}	
+
+    @RequestMapping(value = "/libraries-compatibility", method = RequestMethod.GET)
+    public String showLibraries(Model model) {
+        Collection<Library> results = this.checkerService.findLibraries();
+        model.addAttribute("libraries", results);
+        return "checker/libraries";
+    }
+	
+    @RequestMapping(value = "/libraries-compatibility/{libraryId}/releases", method = RequestMethod.GET)
+    public String showLibraryCompatibility(@PathVariable("libraryId") int libraryId, Model model) {
+        Library library = this.checkerService.findLibraryWithReleasesById(libraryId);
+        List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByLibrary(library);
+        
+        // add dummy comparison with initial release
+        ReleasesComparison initialComparison = new ReleasesComparison();
+        Release initialRelease = library.getReleases().get(library.getReleases().size() - 1);
+        initialComparison.setNewRelease(initialRelease);
+        comparisons.add(initialComparison);
+        
+        model.addAttribute("comparisons", comparisons);
+        return "checker/comparisons";
+    }
+
+    @RequestMapping(value = "/libraries-compatibility/{libraryId}/releases/{referenceId}-{newId}", method = RequestMethod.GET)
+    public String showReleasesComparison(
+            @PathVariable("referenceId") int referenceId,
+            @PathVariable("newId") int newId, Model model) {
+        
+        ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
+        model.addAttribute("comparison", comparison);
+
+        return "checker/result";
+
+    }
 
 }

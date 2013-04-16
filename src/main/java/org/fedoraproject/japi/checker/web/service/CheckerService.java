@@ -49,7 +49,7 @@ public interface CheckerService {
 			throws DataAccessException;
 
 	/**
-	 * It find comparison by library. Library has to has initialized releases 
+	 * Find the comparison by library. Library has to has initialized releases 
 	 * (i.e. loaded by findWithReleasesById(int id)).
 	 * @param library
 	 * @return
@@ -60,6 +60,15 @@ public interface CheckerService {
 
 	public ReleasesComparison findReleasesComparison(int referenceId, int newId)
 	        throws DataAccessException;
+	
+	/**
+     * Return the comparison. If it is not stored in a database, it will compute it.
+     * @param referenceId
+     * @param newId
+     * @return
+     */
+	public ReleasesComparison getReleasesComparison(int referenceId, int newId)
+            throws DataAccessException;
 
 	public void deleteReleasesComparison(ReleasesComparison releasesComparison)
 			throws DataAccessException;

@@ -40,7 +40,7 @@
     <h3>Releases</h3>
     
     <datatables:table id="libraries" data="${library.releases}" cdn="true" row="release" theme="bootstrap2"
-                      cssClass="table table-striped" paginate="false" info="false">
+                      cssClass="table table-striped" paginate="false" info="false" cssStyle="width: 400px;" sort="false">
         <datatables:column title="Name">
             <spring:url value="{libraryId}/releases/{releaseId}.html" var="releaseUrl">
                 <spring:param name="libraryId" value="${library.id}"/>
@@ -48,7 +48,7 @@
             </spring:url>
             <a href="${fn:escapeXml(releaseUrl)}"><c:out value="${release.name}"/></a>
         </datatables:column>
-        <datatables:column title="Updated">
+        <datatables:column title="Date">
             <fmt:formatDate value="${release.date}" type="both" pattern="dd-MM-yyyy" />
         </datatables:column>
     </datatables:table>
