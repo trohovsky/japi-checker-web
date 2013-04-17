@@ -17,7 +17,7 @@
     
     <div class="form-horizontal">
         <div class="form-actions">
-            <spring:url value="/libraries/new.html" var="addUrl">
+            <spring:url value="libraries/new.html" var="addUrl">
             </spring:url>
             <a href="${fn:escapeXml(addUrl)}" class="btn btn-success"><i class="icon-plus icon-white"></i> New Library</a>
     	</div>
@@ -26,7 +26,7 @@
     <datatables:table id="libraries" data="${selections}" cdn="true" row="library" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false" cssStyle="width: 400px;">
         <datatables:column title="Name">
-            <spring:url value="/libraries/{libraryId}.html" var="libraryUrl">
+            <spring:url value="libraries/{libraryId}.html" var="libraryUrl">
                 <spring:param name="libraryId" value="${library.id}"/>
             </spring:url>
             <a href="${fn:escapeXml(libraryUrl)}"><c:out value="${library.name}"/></a>

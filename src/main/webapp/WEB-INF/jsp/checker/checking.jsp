@@ -25,7 +25,7 @@
 				<button type="submit" class="btn btn-info">Check</button>
 		</form:form>
     </div>
-    <a href="libraries-compatibility.html">Libraries</a>
+    <a href="libraries.html">Libraries</a>
 	<jsp:include page="../fragments/footer.jsp"/>
 
 </div>

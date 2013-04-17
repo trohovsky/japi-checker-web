@@ -35,25 +35,25 @@ public class LibraryController {
         dataBinder.setDisallowedFields("id");
     }
 
-    @RequestMapping(value = "/libraries/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/libraries/new", method = RequestMethod.GET)
     public String initCreationForm(Model model) {
         Library library = new Library();
         model.addAttribute(library);
         return "libraries/createOrUpdate";
     }
 
-    @RequestMapping(value = "/libraries/new", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/libraries/new", method = RequestMethod.POST)
     public String processCreationForm(@Valid Library library, BindingResult result, SessionStatus status) { // TODO @Valid
         if (result.hasErrors()) {
             return "libraries/createOrUpdate";
         } else {
             this.checkerService.saveLibrary(library);
             status.setComplete();
-            return "redirect:/libraries/" + library.getId();
+            return "redirect:/admin/libraries/" + library.getId();
         }
     }
     
-    @RequestMapping(value = "/libraries", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/libraries", method = RequestMethod.GET)
     public String showLibraries(Model model) {
     	Collection<Library> results = this.checkerService.findLibraries();
     	model.addAttribute("selections", results);
@@ -92,21 +92,21 @@ public class LibraryController {
         }
     }*/
 
-    @RequestMapping(value = "/libraries/{libraryId}/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/libraries/{libraryId}/edit", method = RequestMethod.GET)
     public String initUpdateForm(@PathVariable("libraryId") int libraryId, Model model) {
         Library library = this.checkerService.findLibraryById(libraryId);
         model.addAttribute(library);
         return "libraries/createOrUpdate";
     }
 
-    @RequestMapping(value = "/libraries/{libraryId}/edit", method = RequestMethod.PUT)
+    @RequestMapping(value = "/admin/libraries/{libraryId}/edit", method = RequestMethod.PUT)
     public String processUpdateForm(Library library, BindingResult result, SessionStatus status) { // TODO @Valid 
         if (result.hasErrors()) {
             return "libraries/createOrUpdate";
         } else {
             this.checkerService.saveLibrary(library);
             status.setComplete();
-            return "redirect:/libraries/{libraryId}";
+            return "redirect:/admin/libraries/{libraryId}";
         }
     }
 
@@ -116,17 +116,17 @@ public class LibraryController {
 	 * @param libraryId the ID of the library to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
-	@RequestMapping("/libraries/{libraryId}")
+	@RequestMapping("/admin/libraries/{libraryId}")
     public ModelAndView showLibrary(@PathVariable("libraryId") int libraryId) {
         ModelAndView mav = new ModelAndView("libraries/details");
         mav.addObject(this.checkerService.findLibraryWithReleasesById(libraryId));
         return mav;
     }
 
-	@RequestMapping(value = "/libraries/{libraryId}/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/libraries/{libraryId}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("libraryId") int libraryId) {
 	    Library library = this.checkerService.findLibraryById(libraryId);
 	    this.checkerService.deleteLibrary(library);
-	    return "redirect:/libraries";
+	    return "redirect:/admin/libraries";
 	}
 }

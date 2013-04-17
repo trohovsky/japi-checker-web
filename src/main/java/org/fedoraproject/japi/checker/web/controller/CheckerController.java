@@ -53,14 +53,14 @@ public class CheckerController {
 		}
 	}	
 
-    @RequestMapping(value = "/libraries-compatibility", method = RequestMethod.GET)
+    @RequestMapping(value = "/libraries", method = RequestMethod.GET)
     public String showLibraries(Model model) {
         Collection<Library> results = this.checkerService.findLibraries();
         model.addAttribute("libraries", results);
         return "checker/libraries";
     }
 	
-    @RequestMapping(value = "/libraries-compatibility/{libraryId}/releases", method = RequestMethod.GET)
+    @RequestMapping(value = "/libraries/{libraryId}/releases", method = RequestMethod.GET)
     public String showLibraryCompatibility(@PathVariable("libraryId") int libraryId, Model model) {
         Library library = this.checkerService.findLibraryWithReleasesById(libraryId);
         List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByLibrary(library);
@@ -75,7 +75,7 @@ public class CheckerController {
         return "checker/comparisons";
     }
 
-    @RequestMapping(value = "/libraries-compatibility/{libraryId}/releases/{referenceId}-{newId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/libraries/{libraryId}/releases/{referenceId}-{newId}", method = RequestMethod.GET)
     public String showReleasesComparison(
             @PathVariable("referenceId") int referenceId,
             @PathVariable("newId") int newId, Model model) {

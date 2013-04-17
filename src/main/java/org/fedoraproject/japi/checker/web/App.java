@@ -51,14 +51,14 @@ public class App
         	reference = new Release(library, "testProject1");
         	reference.setDate(new Date(System.currentTimeMillis()));
         	service.parseAPI(reference, referenceArtifact);
-            service.saveRelease(reference);
+            service.saveReleaseWithComparison(reference);
         }
         Release newRelease = service.findReleaseWithClassesById(2);
         if (newRelease == null) {
         	newRelease = new Release(library, "testProject2");
         	newRelease.setDate(new Date(System.currentTimeMillis() - 1000*60*60*24*30));
         	service.parseAPI(newRelease, newArtifact);
-        	service.saveRelease(newRelease);
+        	service.saveReleaseWithComparison(newRelease);
         }   
         
         ReleasesComparison comparison = service.findReleasesComparison(1, 2);

@@ -35,7 +35,7 @@ public class ReleaseController {
 	
 	private final CheckerService checkerService;
 	private TaskExecutor taskExecutor;
-	private static final String UPLOAD_PATH = "tmpJARs"; 
+	private static final String UPLOAD_PATH = "tmpJARs/"; 
 
 	@Autowired
 	public ReleaseController(CheckerService checkerService, TaskExecutor taskExecutor) {
@@ -54,7 +54,7 @@ public class ReleaseController {
                 dateFormat, false));
     }
 	
-	@RequestMapping(value = "libraries/{libraryId}/releases/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/libraries/{libraryId}/releases/new", method = RequestMethod.GET)
     public String initCreationForm(@PathVariable("libraryId") int libraryId, Model model) {
 		Library library = this.checkerService.findLibraryById(libraryId);
         Release release = new Release();
@@ -63,7 +63,7 @@ public class ReleaseController {
         return "releases/createOrUpdate";
     }
 	
-    @RequestMapping(value = "/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
+    @RequestMapping(value = "//admin/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
     public String processCreationForm(
             @Valid @ModelAttribute("release") Release release,
             @RequestParam("file") MultipartFile file, BindingResult result,
@@ -94,7 +94,7 @@ public class ReleaseController {
             taskExecutor.execute(uploadReleaseTask);
 
             status.setComplete();
-            return "redirect:/libraries/{libraryId}";
+            return "redirect:/admin/libraries/{libraryId}";
         }
     }
 
@@ -141,7 +141,7 @@ public class ReleaseController {
 			
 			// store release
 			//long savingStart = System.nanoTime();
-			checkerService.saveRelease(release);
+			checkerService.saveReleaseWithComparison(release);
 			//double savingDuration = (System.nanoTime() - savingStart) * 1.0e-9;
 			
 			//System.out.println("parsing of API: " + parsingDuration);
@@ -153,21 +153,21 @@ public class ReleaseController {
 		}
 	}
 
-    @RequestMapping(value = "/libraries/*/releases/{releaseId}/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/libraries/*/releases/{releaseId}/edit", method = RequestMethod.GET)
     public String initUpdateForm(@PathVariable("releaseId") int releaseId, Model model) {
         Release release = this.checkerService.findReleaseById(releaseId);
         model.addAttribute(release);
         return "releases/createOrUpdate";
     }
 
-    @RequestMapping(value = "/libraries/{libraryId}/releases/{releaseId}/edit", method = {RequestMethod.PUT, RequestMethod.POST})
+    @RequestMapping(value = "/admin/libraries/{libraryId}/releases/{releaseId}/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public String processUpdateForm(@ModelAttribute("release") Release release, BindingResult result, SessionStatus status) {
         if (result.hasErrors()) {
             return "releases/createOrUpdate";
         } else {
             this.checkerService.saveRelease(release);
             status.setComplete();
-            return "redirect:/libraries/{libraryId}/releases/{releaseId}";
+            return "redirect:/admin/libraries/{libraryId}/releases/{releaseId}";
         }
     }
     
@@ -177,17 +177,17 @@ public class ReleaseController {
 	 * @param releaseId the ID of the release to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
-	@RequestMapping("/libraries/*/releases/{releaseId}")
+	@RequestMapping("/admin/libraries/*/releases/{releaseId}")
     public ModelAndView showLibrary(@PathVariable("releaseId") int releaseId) {
         ModelAndView mav = new ModelAndView("releases/details");
         mav.addObject(this.checkerService.findReleaseById(releaseId));
         return mav;
     }
 	
-	@RequestMapping(value = "/libraries/{libraryId}/releases/{releaseId}/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/libraries/{libraryId}/releases/{releaseId}/delete", method = RequestMethod.GET)
     public String delete(@PathVariable("releaseId") int releaseId) {
         Release release = this.checkerService.findReleaseById(releaseId);
         this.checkerService.deleteRelease(release);
-        return "redirect:/libraries/{libraryId}";
+        return "redirect:/admin/libraries/{libraryId}";
     }
 }

@@ -11,6 +11,7 @@ import org.fedoraproject.japi.checker.web.dao.ReleasesComparisonDAO;
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -76,16 +77,17 @@ public class CheckerServiceImpl implements CheckerService {
 	}
 	
 	public void saveRelease(Release release) throws DataAccessException {
-		releaseDAO.save(release);
-		// classes are empty only when release is uploaded 
-		if (!release.getClasses().isEmpty()) {
-		    Release previousRelease = releaseDAO.findPrevious(release);
-		    if (previousRelease != null) {
-		        ReleasesComparison comparison = checkBackwardCompatibility(previousRelease, release);
-		        releasesComparisonDAO.save(comparison);
-		    }
-		}
+	    releaseDAO.save(release);
 	}
+	
+    public void saveReleaseWithComparison(Release release) throws DataAccessException {
+        releaseDAO.save(release);
+        Release previousRelease = releaseDAO.findPrevious(release);
+        if (previousRelease != null) {
+            ReleasesComparison comparison = checkBackwardCompatibility(previousRelease, release);
+            releasesComparisonDAO.save(comparison);
+        }
+    }
 
 	public List<Release> findReleases() throws DataAccessException {
 		return releaseDAO.findAll();

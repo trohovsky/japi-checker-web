@@ -6,7 +6,7 @@
     <div class="navbar-inner">
         <ul class="nav">
             <li><a href="<spring:url value="/" htmlEscape="true" />">Home</a></li>
-            <li><a href="<spring:url value="/libraries.html" htmlEscape="true" />">Libraries</a></li>
+            <li><a href="<spring:url value="/admin/libraries.html" htmlEscape="true" />">Libraries</a></li>
             <li><a href="<spring:url value="/help.html" htmlEscape="true" />">Help</a></li>
         </ul>
     </div>
