@@ -57,7 +57,7 @@
         <div class="form-actions">
             <c:choose>
                 <c:when test="${release['new']}">
-                    <button type="submit" class="btn btn-info">Add Release</button>
+                    <button type="submit" class="btn btn-success">Add Release</button>
                 </c:when>
                 <c:otherwise>
                     <button type="submit" class="btn btn-info">Update Release</button>

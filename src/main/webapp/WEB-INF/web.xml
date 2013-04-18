@@ -8,6 +8,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     <display-name>Japi Checker Web</display-name>
     <description>Japi Checker Web is an information system which provides information about backward compatibility of different versions of Java libraries.</description>
 
+    <!--
+- Location of the XML file that defines the root application context.
+- Applied by ContextLoaderServlet.
+-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:spring/business-config.xml
+            classpath:spring/security-config.xml
+        </param-value> <!-- classpath:spring/tools-config.xml -->
+    </context-param>
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -69,7 +81,7 @@ see here: http://static.springsource.org/spring/docs/current/spring-framework-re
         <filter-name>httpMethodFilter</filter-name>
         <servlet-name>checker</servlet-name>
     </filter-mapping>
-
+    
     <!-- Spring security -->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>

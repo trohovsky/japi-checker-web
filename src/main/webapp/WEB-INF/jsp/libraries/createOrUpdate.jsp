@@ -36,7 +36,7 @@
         <div class="form-actions">
             <c:choose>
                 <c:when test="${library['new']}">
-                    <button type="submit" class="btn btn-info">Add Library</button>
+                    <button type="submit" class="btn btn-success">Add Library</button>
                 </c:when>
                 <c:otherwise>
                     <button type="submit" class="btn btn-info">Update Library</button>

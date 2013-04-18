@@ -18,7 +18,7 @@
     <datatables:table id="libraries" data="${libraries}" cdn="true" row="library" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false" cssStyle="width: 400px;">
         <datatables:column title="Name">
-            <spring:url value="libraries/{libraryId}/releases.html" var="libraryUrl">
+            <spring:url value="{libraryId}/releases.html" var="libraryUrl">
                 <spring:param name="libraryId" value="${library.id}"/>
             </spring:url>
             <a href="${fn:escapeXml(libraryUrl)}"><c:out value="${library.name}"/></a>

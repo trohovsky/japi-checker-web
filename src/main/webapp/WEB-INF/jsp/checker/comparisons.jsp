@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="datatables" uri="http://github.com/dandelion/datatables" %>
 
 <html lang="en">
@@ -12,8 +13,23 @@
 <body>
 <div class="container">
     <jsp:include page="../fragments/bodyHeader.jsp"/>
-    
+
     <h2>Releases</h2>
+    
+    <div id="checker-container">
+        <form:form modelAttribute="checkingForm" action="check" method="get" class="form-inline">
+
+            <label class="control-label" for="reference">Reference</label>
+
+            <form:select path="referenceId" items="${reference}" itemValue="id"></form:select>
+
+            <label class="control-label" for="newReleases">New</label>
+
+            <form:select path="newId" items="${newRelease}" itemValue="id"></form:select>
+
+            <button type="submit" class="btn btn-primary">Check</button>
+        </form:form>
+    </div>
     
     <datatables:table id="comparisons" data="${comparisons}" cdn="true" row="comparison" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false" cssStyle="width: 400px;" sort="false">

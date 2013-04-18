@@ -27,42 +27,21 @@ public class CheckerController {
 		this.checkerService = checkerService;
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String initCheckingForm(Model model) {
-		List<Release> reference = this.checkerService.findReleases();
-		List<Release> newRelease = this.checkerService.findReleases();
-		model.addAttribute("reference", reference);
-		model.addAttribute("newRelease", newRelease);
-		model.addAttribute("checkingForm", new CheckingForm());
-		return "checker/checking";
-	}
-
-	@RequestMapping(value = "/check", method = RequestMethod.GET)
-	public String processCheckingForm(
-			@ModelAttribute("checkingForm") CheckingForm checkingForm,
-			BindingResult result, SessionStatus status, Model model) {
-		if (result.hasErrors()) {
-			return "";
-		} else {
-		    int referenceId = checkingForm.getReferenceId();
-		    int newId = checkingForm.getNewId();
-		    ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
-			model.addAttribute("comparison", comparison);
-			status.setComplete();
-			return "checker/result";
-		}
-	}	
-
-    @RequestMapping(value = "/libraries", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showLibraries(Model model) {
         Collection<Library> results = this.checkerService.findLibraries();
         model.addAttribute("libraries", results);
         return "checker/libraries";
     }
 	
-    @RequestMapping(value = "/libraries/{libraryId}/releases", method = RequestMethod.GET)
+    @RequestMapping(value = "/{libraryId}/releases", method = RequestMethod.GET)
     public String showLibraryCompatibility(@PathVariable("libraryId") int libraryId, Model model) {
+        
+        // checking form initialization
         Library library = this.checkerService.findLibraryWithReleasesById(libraryId);
+        this.initCheckingForm(library.getReleases(), model);
+        
+        // getting of comparisons
         List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByLibrary(library);
         
         // add dummy comparison with initial release
@@ -74,8 +53,31 @@ public class CheckerController {
         model.addAttribute("comparisons", comparisons);
         return "checker/comparisons";
     }
+    
+    private void initCheckingForm(List<Release> releases, Model model) {
+        model.addAttribute("reference", releases);
+        model.addAttribute("newRelease", releases);
+        model.addAttribute("checkingForm", new CheckingForm());
+    }
 
-    @RequestMapping(value = "/libraries/{libraryId}/releases/{referenceId}-{newId}", method = RequestMethod.GET)
+    // TODO functionally duplicate to showReleaseComparison, use only one of them
+    @RequestMapping(value = "*/check", method = RequestMethod.GET)
+    public String processCheckingForm(
+            @ModelAttribute("checkingForm") CheckingForm checkingForm,
+            BindingResult result, SessionStatus status, Model model) {
+        if (result.hasErrors()) {
+            return "";
+        } else {
+            int referenceId = checkingForm.getReferenceId();
+            int newId = checkingForm.getNewId();
+            ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
+            model.addAttribute("comparison", comparison);
+            status.setComplete();
+            return "checker/result";
+        }
+    }   
+
+    @RequestMapping(value = "/{libraryId}/releases/{referenceId}-{newId}", method = RequestMethod.GET)
     public String showReleasesComparison(
             @PathVariable("referenceId") int referenceId,
             @PathVariable("newId") int newId, Model model) {
