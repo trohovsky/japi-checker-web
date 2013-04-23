@@ -41,16 +41,18 @@ public class CheckerController {
         Library library = this.checkerService.findLibraryWithReleasesById(libraryId);
         this.initCheckingForm(library.getReleases(), model);
         
-        // getting of comparisons
-        List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByLibrary(library);
-        
-        // add dummy comparison with initial release
-        ReleasesComparison initialComparison = new ReleasesComparison();
-        Release initialRelease = library.getReleases().get(library.getReleases().size() - 1);
-        initialComparison.setNewRelease(initialRelease);
-        comparisons.add(initialComparison);
-        
-        model.addAttribute("comparisons", comparisons);
+        if (!library.getReleases().isEmpty()) {  
+            // getting of comparisons
+            List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByLibrary(library);
+            
+            // add dummy comparison with initial release
+            ReleasesComparison initialComparison = new ReleasesComparison();
+            Release initialRelease = library.getReleases().get(library.getReleases().size() - 1);
+            initialComparison.setNewRelease(initialRelease);
+            comparisons.add(initialComparison);
+            
+            model.addAttribute("comparisons", comparisons);
+        }
         return "checker/comparisons";
     }
     

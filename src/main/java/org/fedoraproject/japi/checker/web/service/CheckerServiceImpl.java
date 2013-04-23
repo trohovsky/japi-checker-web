@@ -11,7 +11,6 @@ import org.fedoraproject.japi.checker.web.dao.ReleasesComparisonDAO;
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;

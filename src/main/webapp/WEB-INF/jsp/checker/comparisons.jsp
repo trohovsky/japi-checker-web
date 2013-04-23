@@ -15,21 +15,22 @@
     <jsp:include page="../fragments/bodyHeader.jsp"/>
 
     <h2>Releases</h2>
-    
-    <div id="checker-container">
-        <form:form modelAttribute="checkingForm" action="check" method="get" class="form-inline">
-
-            <label class="control-label" for="reference">Reference</label>
-
-            <form:select path="referenceId" items="${reference}" itemValue="id"></form:select>
-
-            <label class="control-label" for="newReleases">New</label>
-
-            <form:select path="newId" items="${newRelease}" itemValue="id"></form:select>
-
-            <button type="submit" class="btn btn-primary">Check</button>
-        </form:form>
-    </div>
+    <c:if test="${not empty comparisons}">
+	    <div id="checker-container">
+	        <form:form modelAttribute="checkingForm" action="check" method="get" class="form-inline">
+	
+	            <label class="control-label" for="reference">Reference</label>
+	
+	            <form:select path="referenceId" items="${reference}" itemValue="id"></form:select>
+	
+	            <label class="control-label" for="newReleases">New</label>
+	
+	            <form:select path="newId" items="${newRelease}" itemValue="id"></form:select>
+	
+	            <button type="submit" class="btn btn-primary">Check</button>
+	        </form:form>
+	    </div>
+    </c:if>
     
     <datatables:table id="comparisons" data="${comparisons}" cdn="true" row="comparison" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false" cssStyle="width: 400px;" sort="false">

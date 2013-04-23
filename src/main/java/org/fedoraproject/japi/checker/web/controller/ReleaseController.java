@@ -63,7 +63,7 @@ public class ReleaseController {
         return "releases/createOrUpdate";
     }
 	
-    @RequestMapping(value = "//admin/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
     public String processCreationForm(
             @Valid @ModelAttribute("release") Release release,
             @RequestParam("file") MultipartFile file, BindingResult result,
@@ -76,22 +76,25 @@ public class ReleaseController {
 
             // get file name
             String filename = getFilename(file);
-
-            // store file temporarily
-            File tmpFile = new File(UPLOAD_PATH + filename);
-            try {
-                tmpFile.createNewFile();
-                new FileOutputStream(tmpFile).write(file.getBytes());
-            } catch (IOException e) {
-                // delete saved release
-                checkerService.deleteRelease(release);
-                tmpFile.delete();
-                // return;
+            
+            if (!filename.isEmpty()) {
+                // store file temporarily
+                File tmpFile = new File(UPLOAD_PATH + filename);
+                try {
+                    tmpFile.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(tmpFile);
+                    fos.write(file.getBytes());
+                    fos.close();
+                    
+                    // parse API and update release in thread
+                    Thread uploadReleaseTask = new ReleaseCreationTask(release, tmpFile);
+                    taskExecutor.execute(uploadReleaseTask);
+                } catch (IOException e) {
+                    // delete saved release
+                    checkerService.deleteRelease(release);
+                    tmpFile.delete();
+                }
             }
-
-            // parse API and update release in thread
-            Thread uploadReleaseTask = new ReleaseCreationTask(release, tmpFile);
-            taskExecutor.execute(uploadReleaseTask);
 
             status.setComplete();
             return "redirect:/admin/libraries/{libraryId}";
