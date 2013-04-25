@@ -11,9 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.googlecode.japi.checker.ClassDataLoader;
@@ -108,21 +105,18 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
         }		
 	}
 
-	@Nullable
 	public Class fromName(String name) {
 		return this.classes.get(name);
 	}
 
-	@Nonnull
-	public List<Class> getClasses(@Nonnull URI uri) {
+	public List<Class> getClasses(URI uri) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Nonnull
-	public List<Class> getClasses(@Nonnull URI uri,
-			@Nonnull List<AntPatternMatcher> includes,
-			@Nonnull List<AntPatternMatcher> excludes) {
+	public List<Class> getClasses(URI uri,
+			List<AntPatternMatcher> includes,
+			List<AntPatternMatcher> excludes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
