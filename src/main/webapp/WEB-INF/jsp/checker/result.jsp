@@ -15,9 +15,9 @@
         <div id="summary-container">
             <dl class="dl-horizontal">
                 <dt>Errors:</dt>
-                <dd><c:out value="${comparison.getDifferencesCount('ERROR', true)}" /></dd>
+                <dd><c:out value="${comparison.errorCount}" /></dd>
                 <dt>Warnings:</dt>
-                <dd><c:out value="${comparison.getDifferencesCount('WARNING', true)}" /></dd>
+                <dd><c:out value="${comparison.warningCount}" /></dd>
                 <dt>Result:</dt>
                 <dd> 
 	                <c:choose>

@@ -22,7 +22,8 @@ public class ReleasesComparison implements java.io.Serializable, Reporter {
 	private Integer id;
 	private Release referenceRelease;
 	private Release newRelease;
-	private Boolean compatible; // occurrence of binary or source breakage with ERROR severity
+	private Integer errorCount; // binary or source breakage with ERROR severity
+    private Integer warningCount; // binary or source breakage with WARRNING severity
 	private List<Difference> differences = new ArrayList<Difference>(0);
 
 	public ReleasesComparison() {
@@ -62,12 +63,28 @@ public class ReleasesComparison implements java.io.Serializable, Reporter {
 		this.newRelease = newRelease;
 	}
 	
+	public Integer getErrorCount() {
+        return errorCount;
+    }
+
+    public void setErrorCount(Integer errorCount) {
+        this.errorCount = errorCount;
+    }
+
+    public Integer getWarningCount() {
+        return warningCount;
+    }
+
+    public void setWarningCount(Integer warningCount) {
+        this.warningCount = warningCount;
+    }
+
+	/**
+	 * Occurrence of binary or source breakage with ERROR severity.
+	 * @return
+	 */
 	public boolean isCompatible() {
-	    return compatible;
-	}
-	
-	public void setCompatible(Boolean compatible) {
-	    this.compatible = compatible;
+	    return getErrorCount() == 0;
 	}
 
 	public List<Difference> getDifferences() {

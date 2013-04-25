@@ -66,6 +66,16 @@
                     </c:choose>
             </c:if>
         </datatables:column>
+        <datatables:column title="Errors">
+            <c:if test="${not empty comparison.referenceRelease}">
+                <c:out value="${comparison.errorCount}" />
+            </c:if>
+        </datatables:column>
+        <datatables:column title="Warnings">
+            <c:if test="${not empty comparison.referenceRelease}">
+                <c:out value="${comparison.warningCount}" />
+            </c:if>
+        </datatables:column>
     </datatables:table>
     
     <jsp:include page="../fragments/footer.jsp"/>

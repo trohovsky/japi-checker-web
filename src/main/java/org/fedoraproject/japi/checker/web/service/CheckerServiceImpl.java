@@ -121,7 +121,8 @@ public class CheckerServiceImpl implements CheckerService {
 		ReleasesComparison comparison = new ReleasesComparison(reference, newRelease);
 		checker.checkBackwardCompatibility(comparison, reference.getClasses(), newRelease.getClasses());
 		// set compatibility info
-		comparison.setCompatible(comparison.getDifferencesCount(Severity.ERROR, true) == 0);
+		comparison.setErrorCount(comparison.getDifferencesCount(Severity.ERROR, true));
+		comparison.setWarningCount(comparison.getDifferencesCount(Severity.WARNING, true));
 		return comparison;
 	}
 	
