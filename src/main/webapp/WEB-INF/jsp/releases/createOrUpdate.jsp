@@ -11,11 +11,31 @@
 
 <jsp:include page="../fragments/headTag.jsp"/>
 
-<body>
+<body onload='document.release.name.focus();'>
 <script>
     $(function () {
         $("#date").datepicker({ dateFormat: 'dd-mm-yy'});
     });
+    
+    document.getElementById('file').onchange = uploadOnChange;
+    
+    function uploadOnChange() {
+        var filename = this.value;
+        var lastIndex = filename.lastIndexOf("\\");
+        if (lastIndex >= 0) {
+            filename = filename.substring(lastIndex + 1);
+        }
+        document.getElementById('name').value = filename;
+    }
+    // jQuery
+    /*$('#file').change(function() {
+        var filename = $(this).val();
+        var lastIndex = filename.lastIndexOf("\\");
+        if (lastIndex >= 0) {
+            filename = filename.substring(lastIndex + 1);
+        }
+        $('#name').val(filename);
+    });*/
 </script>
 <div class="container">
     <jsp:include page="../fragments/bodyHeader.jsp"/>
@@ -30,7 +50,7 @@
         <c:otherwise>Edit Release</c:otherwise>
         </c:choose>
     </h2>
-    <form:form modelAttribute="release" method="${method}" enctype="multipart/form-data" class="form-horizontal" id="add-release-form">
+    <form:form modelAttribute="release" method="${method}" enctype="multipart/form-data" class="form-horizontal" name="release">
         <div class="control-group">
             <label class="control-label" for="name">Name</label>
             <div class="controls">
@@ -49,7 +69,7 @@
         <div class="control-group">    
             <label class="control-label" for="file">JAR archive</label>
             <div class="controls">
-                <input type="file" name="file"/>
+                <input id="file" name="file" type="file"/>
             </div>
         </div>
         </c:if>

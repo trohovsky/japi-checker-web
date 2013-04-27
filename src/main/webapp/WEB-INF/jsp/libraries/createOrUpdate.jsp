@@ -10,7 +10,7 @@
 
 <jsp:include page="../fragments/headTag.jsp"/>
 
-<body>
+<body onload='document.library.name.focus();'>
 <div class="container">
     <jsp:include page="../fragments/bodyHeader.jsp"/>
     <c:choose>
@@ -24,7 +24,7 @@
         	<c:otherwise>Edit Library</c:otherwise>
     	</c:choose>
     </h2>
-    <form:form modelAttribute="library" method="${method}" class="form-horizontal" id="add-library-form">
+    <form:form modelAttribute="library" method="${method}" class="form-horizontal" name="library">
         <div class="control-group">
         	<label class="control-label" for="name">Name</label>
         	<div class="controls">
