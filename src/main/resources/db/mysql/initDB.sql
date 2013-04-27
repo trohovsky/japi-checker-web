@@ -98,7 +98,7 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`field` (
   `name` VARCHAR(255) NOT NULL ,
   `access` INT NOT NULL ,
   `descriptor` VARCHAR(255) NOT NULL ,
-  `value` VARCHAR(255) NULL ,
+  `value` VARCHAR(1000) NULL ,
   `class_id` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_field_class1_idx` (`class_id` ASC) ,

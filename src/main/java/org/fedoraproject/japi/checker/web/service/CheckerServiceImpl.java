@@ -1,8 +1,14 @@
 package org.fedoraproject.japi.checker.web.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.fedoraproject.japi.checker.web.dao.LibraryDAO;
@@ -14,6 +20,11 @@ import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.googlecode.japi.checker.BCChecker;
 import com.googlecode.japi.checker.Severity;
@@ -33,13 +44,138 @@ public class CheckerServiceImpl implements CheckerService {
 		this.releasesComparisonDAO = releasesComparisonDAO;
 		this.checker = checker;
 	}
+
+    /* Maven artifact operations */
+
+    /**
+     * Create library for artifact and download all versions of required
+     * artifact from Maven repository and store them as releases.
+     * 
+     * @param groupId
+     * @param artifactId
+     */
+    public void createLibraryFromArtifact(String groupId, String artifactId) {
+        // get artifact versions over REST API
+        List<ArtifactData> artifactDataList = getArtifactDataList(groupId, artifactId);
+
+        // store artifact files temporarily
+        File artifactDir = new File(artifactId);
+        artifactDir.mkdir();
+        List<File> artifactFiles = new ArrayList<File>();
+        for (ArtifactData data : artifactDataList) {
+            File artifactFile = downloadArtifact(groupId, artifactId,
+                    data.getVersion(), data.getPackaging());
+            artifactFiles.add(artifactFile);
+        }
+
+        // store library
+        Library library = new Library();
+        library.setName(artifactId);
+        this.saveLibrary(library);
+
+        // parse files and store releases
+        for (File file : artifactFiles) {
+            Release release = new Release();
+            String releaseName = file.getName().substring(0,
+                    file.getName().lastIndexOf('.'));
+            release.setName(releaseName);
+            ArtifactData data = artifactDataList.get(artifactFiles.indexOf(file));
+            Date releaseDate = data.getTimestamp();
+            release.setDate(releaseDate);
+            release.setLibrary(library);
+
+            this.parseAPI(release, file);
+            this.saveReleaseWithComparison(release);
+
+            // remove artifact file
+            file.delete();
+        }
+
+        // remove artifact directory
+        artifactDir.delete();
+    }
 	
-	/* Library operations */
+    /**
+     * Get data about all versions of the artifact.
+     * 
+     * @param groupId
+     * @param artifactId
+     * @return
+     */
+    private List<ArtifactData> getArtifactDataList(String groupId, String artifactId) {
+        List<ArtifactData> artifactDataList = new ArrayList<ArtifactData>();
+
+        String url = "http://search.maven.org/solrsearch/select?q=g:\""
+                + groupId + "\"+AND+a:\"" + artifactId
+                + "\"&core=gav&rows=1000&wt=xml";
+
+        ContentHandler handler = new ArtifactDataHandler();
+
+        XMLReader myReader;
+        try {
+            InputSource source = new InputSource(new URL(url).openStream());
+            myReader = XMLReaderFactory.createXMLReader();
+            myReader.setContentHandler(handler);
+            myReader.parse(source);
+            artifactDataList = ((ArtifactDataHandler) handler).getArtifactDataList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+
+        return artifactDataList;
+    }
 	
-	public void saveLibrary(Library library) throws DataAccessException {
-		libraryDAO.save(library);
-	}
-	
+    /**
+     * Download the file from URL to specified the file.
+     * 
+     * @param url
+     * @param filename
+     */
+    private void downloadFile(String url, File file) {
+        URL website;
+        try {
+            website = new URL(url);
+            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+            FileOutputStream fos = new FileOutputStream(file);
+            // 16 MB per file could be enough
+            fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+            fos.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Download the artifact.
+     * 
+     * @param groupId
+     * @param artifactId
+     * @param version
+     * @param packaging
+     * @return
+     */
+    private File downloadArtifact(String groupId, String artifactId, String version, String packaging) {
+        String filePath = groupId.replace('.', '/') + "/" + artifactId + "/"
+                + version + "/" + artifactId + "-" + version + "." + packaging;
+        String artifactURL = "http://search.maven.org/remotecontent?filepath="
+                + filePath;
+        File artifactFile = new File(artifactId + "/" + artifactId + "-"
+                + version + "." + packaging);
+        // download
+        downloadFile(artifactURL, artifactFile);
+        return artifactFile;
+    }
+    
+    /* Library operations */
+
+    public void saveLibrary(Library library) throws DataAccessException {
+        libraryDAO.save(library);
+    }
+
 	public List<Library> findLibraries() throws DataAccessException {
 		return libraryDAO.findAll();
 	}
@@ -82,9 +218,20 @@ public class CheckerServiceImpl implements CheckerService {
     public void saveReleaseWithComparison(Release release) throws DataAccessException {
         releaseDAO.save(release);
         Release previousRelease = releaseDAO.findPrevious(release);
+        Release nextRelease = releaseDAO.findNext(release);
+        // create the comparison with the previous release
         if (previousRelease != null) {
             ReleasesComparison comparison = checkBackwardCompatibility(previousRelease, release);
             releasesComparisonDAO.save(comparison);
+        }
+        // create the comparison with the next release
+        if (nextRelease != null) {
+            ReleasesComparison comparison = checkBackwardCompatibility(release, nextRelease);
+            releasesComparisonDAO.save(comparison);
+        }
+        // remove the old comparison if the new release was added between releases
+        if (previousRelease != null & nextRelease != null) {
+            releasesComparisonDAO.delete(previousRelease.getId(), nextRelease.getId());
         }
     }
 
@@ -143,18 +290,15 @@ public class CheckerServiceImpl implements CheckerService {
 	public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException {
 		return releasesComparisonDAO.findByReleasesIds(referenceId, newId);
 	}
-	
-	public ReleasesComparison getReleasesComparison(int referenceId, int newId) {
-        ReleasesComparison comparison = this.findReleasesComparison(referenceId, newId);
+
+    public ReleasesComparison getReleasesComparison(int referenceId, int newId) {
+        ReleasesComparison comparison = releasesComparisonDAO.findByReleasesIds(referenceId, newId);
+        // compute the comparison if it is not in the database
         if (comparison == null) {
-            Release reference = this.findReleaseWithClassesById(referenceId);
-            Release newRelease = this.findReleaseWithClassesById(newId);
+            Release reference = releaseDAO.findWithClassesById(referenceId);
+            Release newRelease = releaseDAO.findWithClassesById(newId);
             comparison = this.checkBackwardCompatibility(reference, newRelease);
         }
         return comparison;
     }
-
-	public void deleteReleasesComparison(ReleasesComparison releasesComparison) throws DataAccessException {
-		releasesComparisonDAO.delete(releasesComparison);
-	}
 }

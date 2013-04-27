@@ -33,7 +33,7 @@
     </c:if>
     
     <datatables:table id="comparisons" data="${comparisons}" cdn="true" row="comparison" theme="bootstrap2"
-                      cssClass="table table-striped" paginate="false" info="false" cssStyle="width: 400px;" sort="false">
+                      cssClass="table table-striped" paginate="false" info="false" sort="false">
         <datatables:column title="Name">
             <c:choose>
 				<c:when test="${not empty comparison.referenceRelease}">

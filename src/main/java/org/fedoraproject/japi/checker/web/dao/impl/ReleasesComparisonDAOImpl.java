@@ -56,7 +56,10 @@ public class ReleasesComparisonDAOImpl implements ReleasesComparisonDAO {
                 .add(Restrictions.eq("newRelease.id", newId)).uniqueResult();
 	}
 
-	public void delete(ReleasesComparison releasesComparison) {
-		sessionFactory.getCurrentSession().delete(releasesComparison);
+    public void delete(int referenceId, int newId) {
+        String hql = "delete from ReleasesComparison where referenceRelease.id = :referenceId and newRelease.id = newId";
+        sessionFactory.getCurrentSession().createQuery(hql)
+                .setInteger("referenceId", referenceId)
+                .setInteger("newId", newId).executeUpdate();
 	}
 }

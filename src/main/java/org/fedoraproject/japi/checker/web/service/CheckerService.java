@@ -9,6 +9,8 @@ import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
 import org.springframework.dao.DataAccessException;
 
 public interface CheckerService {
+    
+    public void createLibraryFromArtifact(String groupId, String artifactId);
 
 	public void saveLibrary(Library library) throws DataAccessException;
 
@@ -71,8 +73,5 @@ public interface CheckerService {
      */
 	public ReleasesComparison getReleasesComparison(int referenceId, int newId)
             throws DataAccessException;
-
-	public void deleteReleasesComparison(ReleasesComparison releasesComparison)
-			throws DataAccessException;
 
 }

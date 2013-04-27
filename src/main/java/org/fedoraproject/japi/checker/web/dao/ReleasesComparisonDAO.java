@@ -12,6 +12,6 @@ public interface ReleasesComparisonDAO {
 
 	public ReleasesComparison findByReleasesIds(int referenceId, int newId);
 
-	public void delete(ReleasesComparison persistentInstance);
+	public void delete(int referenceId, int newId);
 
 }
