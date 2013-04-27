@@ -3,6 +3,7 @@ package org.fedoraproject.japi.checker.web.service;
 import java.io.File;
 import java.util.List;
 
+import org.fedoraproject.japi.checker.web.model.Artifact;
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.model.Release;
 import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
@@ -10,7 +11,9 @@ import org.springframework.dao.DataAccessException;
 
 public interface CheckerService {
     
-    public void createLibraryFromArtifact(String groupId, String artifactId);
+    public void createLibraryFromArtifact(Artifact artifact);
+    
+    public void createLibrariesFromArtifacts(List<Artifact> artifacts);
 
 	public void saveLibrary(Library library) throws DataAccessException;
 

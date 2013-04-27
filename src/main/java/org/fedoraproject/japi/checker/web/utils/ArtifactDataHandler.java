@@ -1,21 +1,21 @@
-package org.fedoraproject.japi.checker.web.service;
+package org.fedoraproject.japi.checker.web.utils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import org.fedoraproject.japi.checker.web.model.Artifact;
+import org.fedoraproject.japi.checker.web.model.ArtifactVersion;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ArtifactDataHandler extends DefaultHandler {
 
-    private ArtifactData data;
+    private ArtifactVersion version;
     private char element;
-    private List<ArtifactData> artifactDataList = new ArrayList<ArtifactData>();
-
-    List<ArtifactData> getArtifactDataList() {
-        return this.artifactDataList;
+    private Artifact artifact;
+    
+    public ArtifactDataHandler(Artifact artifact) {
+        this.artifact = artifact;
     }
 
     public void characters(char[] ch, int start, int length)
@@ -25,25 +25,25 @@ public class ArtifactDataHandler extends DefaultHandler {
         case 'P':
             content = new String(ch, start, length);
             if (content.toString().equals("N/A")) {
-                data.setPackaging("jar");
+                version.setPackaging("jar");
             } else {
-                data.setPackaging(content.toString());
+                version.setPackaging(content.toString());
             }
             break;
         case 'T':
             content = new String(ch, start, length);
-            data.setTimestamp(new Date(Long.parseLong(content.toString())));
+            version.setTimestamp(new Date(Long.parseLong(content.toString())));
             break;
         case 'V':
             content = new String(ch, start, length);
-            data.setVersion(content.toString());
+            version.setVersion(content.toString());
         }
     }
 
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
         if (localName.equals("doc")) {
-            data = new ArtifactData();
+            version = new ArtifactVersion(artifact);
         } else if (localName.equals("str")) {
             if (atts.getLength() > 0) {
                 String name = atts.getValue(0);
@@ -67,7 +67,7 @@ public class ArtifactDataHandler extends DefaultHandler {
             throws SAXException {
         element = '-';
         if (localName.equals("doc")) {
-            artifactDataList.add(data);
+            artifact.addVersion(version);
         }
     }
 }
