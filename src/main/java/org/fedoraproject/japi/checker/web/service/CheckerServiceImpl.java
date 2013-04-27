@@ -47,6 +47,9 @@ public class CheckerServiceImpl implements CheckerService {
     public void createLibraryFromArtifact(Artifact artifact) {
         // get artifact versions over REST API
         artifact.initVersions();
+        if (artifact.getVersions().isEmpty()) {
+            return;
+        }
 
         // store artifact files temporarily
         File artifactDir = new File(artifact.getArtifactId());

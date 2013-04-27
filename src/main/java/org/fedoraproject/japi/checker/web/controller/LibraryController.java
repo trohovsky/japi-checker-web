@@ -1,9 +1,11 @@
 package org.fedoraproject.japi.checker.web.controller;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.Valid;
 
+import org.fedoraproject.japi.checker.web.model.Artifact;
 import org.fedoraproject.japi.checker.web.model.Library;
 import org.fedoraproject.japi.checker.web.service.CheckerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,26 @@ public class LibraryController {
 	@InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
+    }
+
+    @RequestMapping(value = "/admin/libraries/new-from-artifacts", method = RequestMethod.GET)
+    public String initCreateFromArtifactsForm(Model model) {
+        ArtifactsForm artifactsForm = new ArtifactsForm();
+        model.addAttribute(artifactsForm);
+        return "libraries/createFromArtifacts";
+    }
+
+    @RequestMapping(value = "/admin/libraries/new-from-artifacts", method = RequestMethod.POST)
+    public String processCreateFromArtifactsForm(ArtifactsForm artifactsForm,
+            BindingResult result, SessionStatus status) { // TODO @Valid
+        if (result.hasErrors()) {
+            return "libraries/createFromArtifacts";
+        } else {
+            List<Artifact> artifacts = artifactsForm.getArtifacts();
+            this.checkerService.createLibrariesFromArtifacts(artifacts);
+            status.setComplete();
+            return "redirect:/admin/libraries";
+        }
     }
 
     @RequestMapping(value = "/admin/libraries/new", method = RequestMethod.GET)

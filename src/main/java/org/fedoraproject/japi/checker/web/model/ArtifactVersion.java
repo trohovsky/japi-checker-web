@@ -46,6 +46,7 @@ public class ArtifactVersion {
         String url = "http://search.maven.org/remotecontent?filepath="
                 + filePath;
         file = new File(destDir + "/" + this.getFileName());
+        //System.out.println("Downloading from " + url);
         // download
         Utils.downloadFile(url, file);
         return file;
