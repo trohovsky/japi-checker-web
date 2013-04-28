@@ -14,6 +14,12 @@
     
         <div id="summary-container">
             <dl class="dl-horizontal">
+                <dt>Reference:</dt>
+                <dd><c:out value="${referenceRelease.name}" /></dd>
+                <dt>New:</dt>
+                <dd><c:out value="${newRelease.name}" /></dd>
+            </dl>
+            <dl class="dl-horizontal">
                 <dt>Errors:</dt>
                 <dd><c:out value="${comparison.errorCount}" /></dd>
                 <dt>Warnings:</dt>

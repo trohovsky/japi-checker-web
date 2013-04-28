@@ -72,11 +72,19 @@ public class CheckerController {
         } else {
             int referenceId = checkingForm.getReferenceId();
             int newId = checkingForm.getNewId();
-            ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
-            model.addAttribute("comparison", comparison);
+            showComparison(model, referenceId, newId);
             status.setComplete();
             return "checker/result";
         }
+    }
+
+    private void showComparison(Model model, int referenceId, int newId) {
+        ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
+        Release referenceRelease = this.checkerService.findReleaseById(referenceId);
+        Release newRelease = this.checkerService.findReleaseById(newId);
+        model.addAttribute("comparison", comparison);
+        model.addAttribute("referenceRelease", referenceRelease);
+        model.addAttribute("newRelease", newRelease);
     }   
 
     @RequestMapping(value = "/{libraryId}/releases/{referenceId}-{newId}", method = RequestMethod.GET)
@@ -84,8 +92,7 @@ public class CheckerController {
             @PathVariable("referenceId") int referenceId,
             @PathVariable("newId") int newId, Model model) {
         
-        ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
-        model.addAttribute("comparison", comparison);
+        showComparison(model, referenceId, newId);
 
         return "checker/result";
 
