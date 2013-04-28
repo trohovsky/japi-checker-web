@@ -119,7 +119,7 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`method` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   `access` INT NOT NULL ,
-  `descriptor` VARCHAR(1000) NOT NULL ,
+  `descriptor` VARCHAR(600) NOT NULL ,
   `value` VARCHAR(255) NULL ,
   `line` INT NULL ,
   `class_id` INT NOT NULL ,
@@ -159,7 +159,7 @@ DROP TABLE IF EXISTS `japi-checker-web`.`type_parameter` ;
 
 CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`type_parameter` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(45) NOT NULL ,
+  `name` VARCHAR(5) NOT NULL ,
   `method_id` INT NULL ,
   `class_id` INT NULL ,
   PRIMARY KEY (`id`) ,

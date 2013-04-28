@@ -15,6 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.googlecode.japi.checker.ClassDataLoader;
 import com.googlecode.japi.checker.JarReader;
+import com.googlecode.japi.checker.model.Scope;
 import com.googlecode.japi.checker.utils.AntPatternMatcher;
 
 /**
@@ -125,5 +126,9 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	public String toString() {
 		return this.name;
 	}
+
+    public Scope getVisibilityLimit() {
+        return Scope.PROTECTED;
+    }
 
 }
