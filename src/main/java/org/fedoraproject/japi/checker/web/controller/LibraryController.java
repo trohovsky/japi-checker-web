@@ -41,7 +41,7 @@ public class LibraryController {
     public String initCreateFromArtifactsForm(Model model) {
         ArtifactsForm artifactsForm = new ArtifactsForm();
         model.addAttribute(artifactsForm);
-        return "libraries/createFromArtifacts";
+        return "libraries/importFromArtifacts";
     }
 
     @RequestMapping(value = "/admin/libraries/new-from-artifacts", method = RequestMethod.POST)

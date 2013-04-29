@@ -19,10 +19,10 @@
         <div class="form-actions">
             <spring:url value="libraries/new.html" var="addUrl">
             </spring:url>
-            <spring:url value="libraries/new-from-artifacts.html" var="addArtifactsUrl">
+            <spring:url value="libraries/new-from-artifacts.html" var="importArtifactsUrl">
             </spring:url>
             <a href="${fn:escapeXml(addUrl)}" class="btn btn-success"><i class="icon-plus icon-white"></i> New Library</a>
-            <a href="${fn:escapeXml(addArtifactsUrl)}" class="btn btn-success"><i class="icon-plus icon-white"></i> New Libraries From Artifacts</a>
+            <a href="${fn:escapeXml(importArtifactsUrl)}" class="btn btn-success"><i class="icon-plus icon-white"></i> Import Libraries from Artifacts</a>
     	</div>
     </div>
     

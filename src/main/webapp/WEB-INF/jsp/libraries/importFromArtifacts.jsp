@@ -14,19 +14,19 @@
 <div class="container">
     <jsp:include page="../fragments/bodyHeader.jsp"/>
     <h2>
-    	Create Libraries from Artifacts
+    	Import Libraries from Artifacts
     </h2>
     <form:form modelAttribute="artifactsForm" method="post" class="form-horizontal" name="artifacts">
         <p>
-        Please write one Maven artifact (whitespace separated groupId and artifactId) per line. Example:</br>
+        Please write one Maven artifact (whitespace separated groupId and artifactId) per line. Example:<br>
         <em>
-        com.google.inject guice</br>
+        com.google.inject guice<br>
         com.googlecode.japi-checker japi-checker
         </em>
         </p>
         <p>
-        Important: The artifacts will be downloaded from Maven Central, wchich has limited download speed. 
-        Thus downloading of artifacts may take long time. Approximately speed of processing is 9 MB/min.
+        Important: Aartifacts will be downloaded from Maven Central, which has limited download speed. 
+        Thus downloading of artifacts may take long time. Approximate speed of processing is 9 MB/min.
         </p>
         <div class="control-group">
         	<label class="control-label" for="artifactsText">Artifacts</label>
@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-success">Add Artifacts</button>
+            <button type="submit" class="btn btn-success">Import Libraries</button>
         </div>
     </form:form>
 </div>

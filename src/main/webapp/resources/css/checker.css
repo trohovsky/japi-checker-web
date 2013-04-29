@@ -1,8 +1,13 @@
-#checker-container {
-  margin: 0 auto;
-  width: 700px;
+h1 {
+	color: #737373;
 }
+
+#checker-container {
+	margin: 0 auto;
+	width: 700px;
+}
+
 #login-container {
-  margin: 0 auto;
-  width: 400px;
+	margin: 0 auto;
+	width: 400px;
 }
