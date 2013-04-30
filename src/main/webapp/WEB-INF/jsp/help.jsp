@@ -11,7 +11,7 @@
 <div class="container">
     <jsp:include page="fragments/bodyHeader.jsp"/>
     <h2>Help</h2>
-    ... once a help will be here
+    ... once help will be here
     <jsp:include page="fragments/footer.jsp"/>
 
 </div>

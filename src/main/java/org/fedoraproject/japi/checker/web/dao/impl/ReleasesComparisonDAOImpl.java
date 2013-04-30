@@ -27,8 +27,8 @@ public class ReleasesComparisonDAOImpl implements ReleasesComparisonDAO {
 	public List<ReleasesComparison> findByReleasesIds(List<Integer> ids) {
         if (ids.size() > 1) {
             StringBuffer sql = new StringBuffer("select c from ReleasesComparison as c " +
-            		"join fetch c.referenceRelease r " +
-            		"join fetch c.newRelease n where");
+            		"left join fetch c.referenceRelease r " +
+            		"left join fetch c.newRelease n where");
             // comparison between first two releases
             sql.append(" c.referenceRelease.id = ");
             sql.append(ids.get(1));

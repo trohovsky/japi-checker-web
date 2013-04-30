@@ -26,7 +26,7 @@
         </p>
         <p>
         Important: Aartifacts will be downloaded from Maven Central, which has limited download speed. 
-        Thus downloading of artifacts may take long time. Approximate speed of processing is 9 MB/min.
+        Thus downloading of artifacts may take a long time. Approximate speed of processing is 9 MB/min.
         </p>
         <div class="control-group">
         	<label class="control-label" for="artifactsText">Artifacts</label>

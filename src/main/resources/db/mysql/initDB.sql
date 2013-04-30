@@ -78,7 +78,6 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`implemented_interface` (
   `name` VARCHAR(255) NOT NULL ,
   `class_id` INT NOT NULL ,
   `list_index` INT NOT NULL ,
-  PRIMARY KEY (`class_id`, `list_index`) ,
   INDEX `fk_implemented_interface_class1_idx` (`class_id` ASC) ,
   CONSTRAINT `fk_implemented_interface_class1`
     FOREIGN KEY (`class_id` )
@@ -142,7 +141,6 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`throwing_exception` (
   `name` VARCHAR(255) NOT NULL ,
   `method_id` INT NOT NULL ,
   `list_index` INT NOT NULL ,
-  PRIMARY KEY (`method_id`, `list_index`) ,
   INDEX `fk_throwing_exception_method1_idx` (`method_id` ASC) ,
   CONSTRAINT `fk_throwing_exception_method1`
     FOREIGN KEY (`method_id` )
@@ -187,7 +185,6 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`type_parameter_bound` (
   `name` VARCHAR(255) NOT NULL ,
   `type_parameter_id` INT NOT NULL ,
   `list_index` INT NOT NULL ,
-  PRIMARY KEY (`type_parameter_id`, `list_index`) ,
   INDEX `fk_type_parameter_bound_type_parameter1_idx` (`type_parameter_id` ASC) ,
   CONSTRAINT `fk_type_parameter_bound_type_parameter1`
     FOREIGN KEY (`type_parameter_id` )
@@ -257,7 +254,6 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`argument` (
   `difference_id` INT NOT NULL ,
   `list_index` INT NOT NULL ,
   INDEX `fk_argument_difference1_idx` (`difference_id` ASC) ,
-  PRIMARY KEY (`difference_id`, `list_index`) ,
   CONSTRAINT `fk_argument_difference1`
     FOREIGN KEY (`difference_id` )
     REFERENCES `japi-checker-web`.`difference` (`id` )
