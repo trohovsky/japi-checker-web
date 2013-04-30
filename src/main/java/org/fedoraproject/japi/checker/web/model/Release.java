@@ -11,7 +11,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.googlecode.japi.checker.ClassDataLoader;
 import com.googlecode.japi.checker.JarReader;
@@ -31,7 +34,8 @@ public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 	private Library library;
 	@NotEmpty
 	private String name;
-	//@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@NotNull
 	private Date date;
 	private Map<String, Class> classes = new LinkedHashMap<String, Class>();;
 

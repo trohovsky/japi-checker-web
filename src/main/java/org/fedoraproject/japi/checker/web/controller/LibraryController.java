@@ -65,7 +65,7 @@ public class LibraryController {
     }
 
     @RequestMapping(value = "/admin/libraries/new", method = RequestMethod.POST)
-    public String processCreationForm(@Valid Library library, BindingResult result, SessionStatus status) { // TODO @Valid
+    public String processCreationForm(@Valid Library library, BindingResult result, SessionStatus status) {
         if (result.hasErrors()) {
             return "libraries/createOrUpdate";
         } else {
@@ -122,7 +122,7 @@ public class LibraryController {
     }
 
     @RequestMapping(value = "/admin/libraries/{libraryId}/edit", method = RequestMethod.PUT)
-    public String processUpdateForm(Library library, BindingResult result, SessionStatus status) { // TODO @Valid 
+    public String processUpdateForm(@Valid Library library, BindingResult result, SessionStatus status) { 
         if (result.hasErrors()) {
             return "libraries/createOrUpdate";
         } else {

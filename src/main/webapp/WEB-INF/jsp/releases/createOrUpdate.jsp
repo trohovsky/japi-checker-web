@@ -62,6 +62,7 @@
             <label class="control-label" for="date">Date</label>
             <div class="controls">
                 <form:input path="date"/>
+                <span class="help-inline">dd-mm-yyyy</span>
                 <form:errors path="date"/>
             </div>
         </div>

@@ -17,9 +17,9 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,24 +63,27 @@ public class ReleaseController {
         return "releases/createOrUpdate";
     }
 	
+    // TODO validation still does not work
     @RequestMapping(value = "/admin/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
-    public String processCreationForm(
-            @Valid @ModelAttribute("release") Release release,
+    public String processCreationForm(@Valid Release release,
             @RequestParam("file") MultipartFile file, BindingResult result,
             SessionStatus status) {
         if (result.hasErrors()) {
             return "releases/createOrUpdate";
-        } else {
-            // save release
-            checkerService.saveRelease(release);
-
+        } else {    
+            
             // get file name
             String filename = getFilename(file);
             
-            if (!filename.isEmpty()) {
-                // store file temporarily
+            if (filename.isEmpty()) {
+                return "releases/createOrUpdate";
+            } else {
                 File tmpFile = new File(UPLOAD_PATH + filename);
                 try {
+                    // save release
+                    checkerService.saveRelease(release);
+                    
+                    // store file temporarily
                     tmpFile.createNewFile();
                     FileOutputStream fos = new FileOutputStream(tmpFile);
                     fos.write(file.getBytes());
@@ -164,7 +167,7 @@ public class ReleaseController {
     }
 
     @RequestMapping(value = "/admin/libraries/{libraryId}/releases/{releaseId}/edit", method = {RequestMethod.PUT, RequestMethod.POST})
-    public String processUpdateForm(@ModelAttribute("release") Release release, BindingResult result, SessionStatus status) {
+    public String processUpdateForm(@Valid Release release, BindingResult result, SessionStatus status) {
         if (result.hasErrors()) {
             return "releases/createOrUpdate";
         } else {

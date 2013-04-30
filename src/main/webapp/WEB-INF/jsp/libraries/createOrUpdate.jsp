@@ -28,7 +28,7 @@
         <div class="control-group">
         	<label class="control-label" for="name">Name</label>
         	<div class="controls">
-        		<input type="text" name="name" value="${library.name}"/>
+        		<form:input path="name"/>
         		<form:errors path="name"/>
   	      	</div>
         </div>
