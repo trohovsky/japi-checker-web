@@ -8,12 +8,11 @@ Japi Checker Web
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Japi Checker Web</title>
 
-
     <spring:url value="/webjars/bootstrap/2.3.1/css/bootstrap.min.css" var="bootstrapCss"/>
     <link href="${bootstrapCss}" rel="stylesheet"/>
 
-    <spring:url value="/resources/css/checker.css" var="petclinicCss"/>
-    <link href="${petclinicCss}" rel="stylesheet"/>
+    <spring:url value="/resources/css/checker.css" var="checkerCss"/>
+    <link href="${checkerCss}" rel="stylesheet"/>
 
     <spring:url value="/webjars/jquery/1.9.1/jquery.js" var="jQuery"/>
     <script src="${jQuery}"></script>

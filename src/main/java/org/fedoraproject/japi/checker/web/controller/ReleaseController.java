@@ -17,7 +17,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,10 +64,9 @@ public class ReleaseController {
 	
     // TODO validation still does not work
     @RequestMapping(value = "/admin/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
-    public String processCreationForm(@Valid Release release,
-            @RequestParam("file") MultipartFile file, BindingResult result,
-            SessionStatus status) {
-        if (result.hasErrors()) {
+    public String processCreationForm(@RequestParam("file") MultipartFile file,
+            @Valid Release release, BindingResult result, SessionStatus status) {
+    if (result.hasErrors()) {
             return "releases/createOrUpdate";
         } else {    
             
