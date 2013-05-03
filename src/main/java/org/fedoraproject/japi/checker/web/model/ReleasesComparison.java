@@ -109,17 +109,17 @@ public class ReleasesComparison implements java.io.Serializable, Reporter {
 	/**
 	 * It returns count of differences of specified severity and level of compatibility.
 	 * @param severity
-	 * @param reportSourceAffectingDifferences
+	 * @param reportSourceIncompatibilities
 	 * @return count of differences of specified severity and level of compatibility
 	 */
-	public int getDifferencesCount(Severity severity, boolean reportSourceAffectingDifferences) {
-		if (severity == null && reportSourceAffectingDifferences) {
+	public int getDifferencesCount(Severity severity, boolean reportSourceIncompatibilities) {
+		if (severity == null && reportSourceIncompatibilities) {
 			return differences.size();
 		} else {
 			int count = 0;
 			for (Difference difference : differences) {
-				if (difference.getDifferenceType().getSeverity() == severity) {
-					if (reportSourceAffectingDifferences || !difference.getDifferenceType().isSource()) {
+				if (difference.getSeverity() == severity) {
+					if (reportSourceIncompatibilities || !difference.isSourceIncompatible()) {
 	            		count++;
 	            	}
 				}		

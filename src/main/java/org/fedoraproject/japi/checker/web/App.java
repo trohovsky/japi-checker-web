@@ -84,9 +84,9 @@ public class App
 	
 	public void printReport(ReleasesComparison comparison) {
 		for (Difference difference : comparison.getDifferences()) {
-			if ((difference.getDifferenceType().getSeverity() == Severity.ERROR || 
-	    			difference.getDifferenceType().getSeverity() == Severity.WARNING)) {
-				System.out.println(difference.getDifferenceType().getSeverity() + ": " + difference.getSource() + ": " + difference.getMessage()); //getLine(difference) +
+			if ((difference.getSeverity() == Severity.ERROR || 
+	    			difference.getSeverity() == Severity.WARNING)) {
+				System.out.println(difference.getSeverity() + ": " + difference.getSource() + ": " + difference.getMessage()); //getLine(difference) +
 			}
 		}
 	}

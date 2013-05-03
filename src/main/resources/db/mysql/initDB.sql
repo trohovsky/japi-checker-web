@@ -31,6 +31,8 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`library_release` (
   `library_id` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_release_library_idx` (`library_id` ASC) ,
+  INDEX `name` (`name` ASC) ,
+  INDEX `date` (`date` DESC) ,
   CONSTRAINT `fk_release_library`
     FOREIGN KEY (`library_id` )
     REFERENCES `japi-checker-web`.`library` (`id` )

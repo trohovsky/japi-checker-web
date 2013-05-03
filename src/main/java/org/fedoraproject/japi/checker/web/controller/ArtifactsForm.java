@@ -19,7 +19,7 @@ public class ArtifactsForm {
     }
     
     public List<Artifact> getArtifacts() {
-        List<Artifact> artifactList = new ArrayList<Artifact>();System.out.println(artifactsText);
+        List<Artifact> artifactList = new ArrayList<Artifact>();
         Scanner scanner = new Scanner(artifactsText);
         while (scanner.hasNextLine()) {
           String line = scanner.nextLine();
