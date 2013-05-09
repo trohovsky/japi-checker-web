@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="datatables" uri="http://github.com/dandelion/datatables" %>
 
@@ -41,7 +40,7 @@
         <datatables:table id="comparison" data="${comparison.differences}" cdn="true" row="difference" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false">
         <datatables:column title="severity">
-            <c:out value="${difference.differenceType.severity}"/>
+            <c:out value="${difference.severity}"/>
         </datatables:column>
         <datatables:column title="source">
             <c:out value="${difference.source}"/>
