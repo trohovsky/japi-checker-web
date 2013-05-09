@@ -16,6 +16,7 @@ import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.japi.checker.BCChecker;
 import com.googlecode.japi.checker.Severity;
@@ -87,6 +88,7 @@ public class CheckerServiceImpl implements CheckerService {
      * 
      * @param artifacts
      */
+    @Transactional
     public void createLibrariesFromArtifacts(List<Artifact> artifacts) {
         for (Artifact artifact : artifacts) {
             createLibraryFromArtifact(artifact);
@@ -94,27 +96,33 @@ public class CheckerServiceImpl implements CheckerService {
     }
       
     /* Library operations */
-
+    
+    @Transactional
     public void saveLibrary(Library library) throws DataAccessException {
         libraryDAO.save(library);
     }
 
+    @Transactional(readOnly = true)
 	public List<Library> findLibraries() throws DataAccessException {
 		return libraryDAO.findAll();
 	}
 
+    @Transactional(readOnly = true)
 	public Library findLibraryById(int id) throws DataAccessException {
 		return libraryDAO.findById(id);
 	}
 	
+    @Transactional(readOnly = true)
 	public Library findLibraryWithReleasesById(int id) throws DataAccessException {
 		return libraryDAO.findWithReleasesById(id);
 	}
 
+    @Transactional(readOnly = true)
 	public List<Library> findLibraryByName(String name) throws DataAccessException {
 		return libraryDAO.findByName(name);
 	}
 
+    @Transactional
 	public void deleteLibrary(Library library) throws DataAccessException {
 		libraryDAO.delete(library);
 	}
@@ -134,10 +142,12 @@ public class CheckerServiceImpl implements CheckerService {
 		}
 	}
 	
+    @Transactional
 	public void saveRelease(Release release) throws DataAccessException {
 	    releaseDAO.save(release);
 	}
 	
+    @Transactional
     public void saveReleaseWithComparison(Release release) throws DataAccessException {
         releaseDAO.save(release);
         Release previousRelease = releaseDAO.findPrevious(release);
@@ -157,23 +167,28 @@ public class CheckerServiceImpl implements CheckerService {
             releasesComparisonDAO.delete(previousRelease.getId(), nextRelease.getId());
         }
     }
-
-	public List<Release> findReleases() throws DataAccessException {
+    
+    @Transactional(readOnly = true)
+    public List<Release> findReleases() throws DataAccessException {
 		return releaseDAO.findAll();
 	}
 
-	public Release findReleaseById(int id) throws DataAccessException {
+    @Transactional(readOnly = true)
+    public Release findReleaseById(int id) throws DataAccessException {
 		return releaseDAO.findById(id);
 	}
 	
+    @Transactional(readOnly = true)
 	public Release findReleaseWithClassesById(int id) throws DataAccessException {
 		return releaseDAO.findWithClassesById(id);
 	}
 
+    @Transactional(readOnly = true)
 	public List<Release> findReleaseByName(String name) throws DataAccessException {
 		return releaseDAO.findByName(name);
 	}
 
+    @Transactional
 	public void deleteRelease(Release release) {
 	    Release previousRelease = releaseDAO.findPrevious(release);
 	    Release nextRelease = releaseDAO.findNext(release);
@@ -187,7 +202,7 @@ public class CheckerServiceImpl implements CheckerService {
 	
 	/* ReleasesComparison operations */
 	
-	public ReleasesComparison checkBackwardCompatibility(Release reference, Release newRelease) {
+    public ReleasesComparison checkBackwardCompatibility(Release reference, Release newRelease) {
 		ReleasesComparison comparison = new ReleasesComparison(reference, newRelease);
 		checker.checkBackwardCompatibility(comparison, reference.getClasses(), newRelease.getClasses());
 		// set compatibility info
@@ -196,10 +211,12 @@ public class CheckerServiceImpl implements CheckerService {
 		return comparison;
 	}
 	
+    @Transactional
 	public void saveReleasesComparison(ReleasesComparison releasesComparison) throws DataAccessException {
 		releasesComparisonDAO.save(releasesComparison);
 	}
 
+    @Transactional(readOnly = true)
 	public List<ReleasesComparison> findReleasesComparisonsByLibrary(Library library) throws DataAccessException {
         List<Integer> ids = new ArrayList<Integer>();
         // get ids
@@ -210,10 +227,12 @@ public class CheckerServiceImpl implements CheckerService {
         return releasesComparisonDAO.findByReleasesIds(ids);
     }
 
+    @Transactional(readOnly = true)
 	public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException {
 		return releasesComparisonDAO.findByReleasesIds(referenceId, newId);
 	}
 
+    @Transactional(readOnly = true)
     public ReleasesComparison getReleasesComparison(int referenceId, int newId) {
         ReleasesComparison comparison = releasesComparisonDAO.findByReleasesIds(referenceId, newId);
         // compute the comparison if it is not in the database
