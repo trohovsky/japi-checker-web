@@ -39,13 +39,13 @@
     
         <datatables:table id="comparison" data="${comparison.differences}" cdn="true" row="difference" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false">
-        <datatables:column title="severity">
+        <datatables:column title="severity" filterable="true" filterType="select">
             <c:out value="${difference.severity}"/>
         </datatables:column>
-        <datatables:column title="source">
+        <datatables:column title="source" filterable="true">
             <c:out value="${difference.source}"/>
         </datatables:column>
-        <datatables:column title="message">
+        <datatables:column title="message" filterable="true">
             <c:out value="${difference.message}"/>
         </datatables:column>
     </datatables:table>
