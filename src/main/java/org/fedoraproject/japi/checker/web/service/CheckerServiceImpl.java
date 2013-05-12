@@ -163,15 +163,10 @@ public class CheckerServiceImpl implements CheckerService {
             releasesComparisonDAO.save(comparison);
         }
         // remove the old comparison if the new release was added between releases
-        if (previousRelease != null & nextRelease != null) {
+        if (previousRelease != null && nextRelease != null) {
             releasesComparisonDAO.delete(previousRelease.getId(), nextRelease.getId());
         }
     }
-    
-    @Transactional(readOnly = true)
-    public List<Release> findReleases() throws DataAccessException {
-		return releaseDAO.findAll();
-	}
 
     @Transactional(readOnly = true)
     public Release findReleaseById(int id) throws DataAccessException {
@@ -228,12 +223,7 @@ public class CheckerServiceImpl implements CheckerService {
     }
 
     @Transactional(readOnly = true)
-	public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException {
-		return releasesComparisonDAO.findByReleasesIds(referenceId, newId);
-	}
-
-    @Transactional(readOnly = true)
-    public ReleasesComparison getReleasesComparison(int referenceId, int newId) {
+    public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException {
         ReleasesComparison comparison = releasesComparisonDAO.findByReleasesIds(referenceId, newId);
         // compute the comparison if it is not in the database
         if (comparison == null) {

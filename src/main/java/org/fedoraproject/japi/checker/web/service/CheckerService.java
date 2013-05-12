@@ -37,7 +37,7 @@ public interface CheckerService {
 
     public void saveRelease(Release release) throws DataAccessException;
 
-    public List<Release> findReleases() throws DataAccessException;
+    public void saveReleaseWithComparison(Release release) throws DataAccessException;
 
     public Release findReleaseById(int id) throws DataAccessException;
 
@@ -51,8 +51,6 @@ public interface CheckerService {
 
     public void saveReleasesComparison(ReleasesComparison releasesComparison) throws DataAccessException;
 
-    public void saveReleaseWithComparison(Release release) throws DataAccessException;
-
     /**
      * Find the comparison by library. Library has to has initialized releases
      * (i.e. loaded by findWithReleasesById(int id)).
@@ -61,9 +59,7 @@ public interface CheckerService {
      * @return
      * @throws DataAccessException
      */
-    public List<ReleasesComparison> findReleasesComparisonsByLibrary( Library library) throws DataAccessException;
-
-    public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException;
+    public List<ReleasesComparison> findReleasesComparisonsByLibrary(Library library) throws DataAccessException;
 
     /**
      * Return the comparison. If it is not stored in a database, it will compute
@@ -73,6 +69,6 @@ public interface CheckerService {
      * @param newId
      * @return
      */
-    public ReleasesComparison getReleasesComparison(int referenceId, int newId) throws DataAccessException;
+    public ReleasesComparison findReleasesComparison(int referenceId, int newId) throws DataAccessException;
 
 }

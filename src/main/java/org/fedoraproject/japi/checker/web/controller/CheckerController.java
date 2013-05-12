@@ -79,7 +79,7 @@ public class CheckerController {
     }
 
     private void showComparison(Model model, int referenceId, int newId) {
-        ReleasesComparison comparison = this.checkerService.getReleasesComparison(referenceId, newId);
+        ReleasesComparison comparison = this.checkerService.findReleasesComparison(referenceId, newId);
         Release referenceRelease = this.checkerService.findReleaseById(referenceId);
         Release newRelease = this.checkerService.findReleaseById(newId);
         model.addAttribute("comparison", comparison);

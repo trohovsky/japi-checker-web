@@ -20,9 +20,11 @@
     <context:property-placeholder location="classpath:spring/data-access.properties"/>
 
     <!-- DataSource configuration for Apache Commons DBCP. -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
-          p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
-          p:username="${jdbc.username}" p:password="${jdbc.password}"/>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
+		p:url="${jdbc.url}" p:username="${jdbc.username}" p:password="${jdbc.password}"
+		p:testOnBorrow="true" p:validationQuery="SELECT 1" />
+   
 
     <!-- JNDI DataSource for JEE environments -->
     <!--
