@@ -38,14 +38,14 @@ public class LibraryController {
     }
 
     @RequestMapping(value = "/admin/libraries/new-from-artifacts", method = RequestMethod.GET)
-    public String initCreateFromArtifactsForm(Model model) {
+    public String initImportFromArtifactsForm(Model model) {
         ArtifactsForm artifactsForm = new ArtifactsForm();
         model.addAttribute(artifactsForm);
         return "libraries/importFromArtifacts";
     }
 
     @RequestMapping(value = "/admin/libraries/new-from-artifacts", method = RequestMethod.POST)
-    public String processCreateFromArtifactsForm(ArtifactsForm artifactsForm,
+    public String processImportFromArtifactsForm(ArtifactsForm artifactsForm,
             BindingResult result, SessionStatus status) { // TODO @Valid
         if (result.hasErrors()) {
             return "libraries/createFromArtifacts";

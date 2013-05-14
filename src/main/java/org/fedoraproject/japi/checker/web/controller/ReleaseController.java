@@ -182,7 +182,7 @@ public class ReleaseController {
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@RequestMapping("/admin/libraries/*/releases/{releaseId}")
-    public ModelAndView showLibrary(@PathVariable("releaseId") int releaseId) {
+    public ModelAndView showRelease(@PathVariable("releaseId") int releaseId) {
         ModelAndView mav = new ModelAndView("releases/details");
         mav.addObject(this.checkerService.findReleaseById(releaseId));
         return mav;

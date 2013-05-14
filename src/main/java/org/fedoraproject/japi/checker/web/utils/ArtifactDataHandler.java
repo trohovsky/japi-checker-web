@@ -24,7 +24,7 @@ public class ArtifactDataHandler extends DefaultHandler {
         switch (element) {
         case 'P':
             content = new String(ch, start, length);
-            if (content.toString().equals("N/A")) {
+            if (content.toString().equals("N/A") || content.toString().equals("bundle")) {
                 version.setPackaging("jar");
             } else {
                 version.setPackaging(content.toString());

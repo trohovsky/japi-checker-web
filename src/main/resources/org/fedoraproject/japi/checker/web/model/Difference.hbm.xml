@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Feb 26, 2013 2:04:46 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping default-access="field">
-    <class name="org.fedoraproject.japi.checker.web.model.Difference" table="difference" catalog="`japi-checker-web`">
+    <class name="org.fedoraproject.japi.checker.web.model.Difference" table="difference" catalog="`japi-checker-web`" mutable="false">
         <id name="id" type="int">
             <column name="id" />
             <generator class="increment" />
@@ -39,7 +39,7 @@
                 <param name="enumClass">com.googlecode.japi.checker.DifferenceType</param>
             </type>
         </property>
-        <array name="args" table="argument" fetch="select" cascade="save-update, delete">
+        <array name="args" table="argument" fetch="select" cascade="save-update, delete" mutable="false">
             <key>
                 <column name="difference_id" not-null="true" />
             </key>
