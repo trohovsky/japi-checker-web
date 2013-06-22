@@ -235,6 +235,7 @@ CREATE  TABLE IF NOT EXISTS `japi-checker-web`.`difference` (
   `difference_type` INT NOT NULL ,
   `element_type` VARCHAR(1) NOT NULL ,
   `new_element_type` VARCHAR(1) NULL ,
+  `source` VARCHAR(255) NULL ,
   `releases_comparison_id` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_difference_releases_comparison1_idx` (`releases_comparison_id` ASC) ,

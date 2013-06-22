@@ -41,7 +41,7 @@ public class ReleasesComparisonDAOImpl implements ReleasesComparisonDAO {
                 sql.append(" and c.newRelease.id = ");
                 sql.append(ids.get(i));
             }
-            sql.append(" order by c.newRelease.date desc");
+            sql.append(" order by c.newRelease.date desc, c.newRelease.id desc");
             return sessionFactory.getCurrentSession().createQuery(sql.toString()).list();
         } else {
             return new ArrayList<ReleasesComparison>(0);

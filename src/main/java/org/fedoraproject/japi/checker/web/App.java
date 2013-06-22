@@ -71,10 +71,10 @@ public class App
         printReport(comparison);
 
         // printing of librarie's compatibility overview
-        Library libraryWithReleases = service.findLibraryWithReleasesById(1);
-		List<ReleasesComparison> releasesComparisons = service.findReleasesComparisonsByLibrary(libraryWithReleases);
-		for (int i = 0; i < libraryWithReleases.getReleases().size(); i++) {
-		    Release release = libraryWithReleases.getReleases().get(i);
+        List<Release> releases = service.findReleasesByLibraryId(1);
+		List<ReleasesComparison> releasesComparisons = service.findReleasesComparisonsByReleases(releases);
+		for (int i = 0; i < releases.size(); i++) {
+		    Release release = releases.get(i);
 		    System.out.print(release.getDate() + " " + release.getName());
 		    if (i < releasesComparisons.size()) {
 		        System.out.println(releasesComparisons.get(i).isCompatible() ? " compatible" : " incompatible");

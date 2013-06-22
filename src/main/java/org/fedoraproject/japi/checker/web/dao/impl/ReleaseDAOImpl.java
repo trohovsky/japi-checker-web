@@ -26,9 +26,11 @@ public class ReleaseDAOImpl implements ReleaseDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Release> findAll() {
-		return sessionFactory.getCurrentSession().createQuery("from Release rel order by rel.name").list();
-	}
+    public List<Release> findByLibraryId(int libraryId) {
+         return sessionFactory.getCurrentSession().createCriteria(Release.class)
+                .add(Restrictions.eq("library.id", libraryId))
+                .addOrder(Order.desc("date")).addOrder(Order.desc("id")).list();
+    }
 
 	public Release findById(int id) {
 		return (Release) sessionFactory.getCurrentSession().get(Release.class, id);
@@ -45,8 +47,9 @@ public class ReleaseDAOImpl implements ReleaseDAO {
 	    Release previousRelease = (Release) sessionFactory.getCurrentSession()
 	            .createCriteria(Release.class)
 	            .add(Restrictions.eq("library", release.getLibrary()))
-	            .add(Restrictions.lt("date", release.getDate()))
-	            .addOrder(Order.desc("date")).setMaxResults(1).uniqueResult();
+	            .add(Restrictions.le("date", release.getDate()))
+	            .addOrder(Order.desc("date")).addOrder(Order.desc("id"))
+	            .setMaxResults(1).uniqueResult();
 	    if (previousRelease != null) {
 	        return findWithClassesById(previousRelease.getId());
 	    }
@@ -58,7 +61,8 @@ public class ReleaseDAOImpl implements ReleaseDAO {
                 .createCriteria(Release.class)
                 .add(Restrictions.eq("library", release.getLibrary()))
                 .add(Restrictions.gt("date", release.getDate()))
-                .addOrder(Order.asc("date")).setMaxResults(1).uniqueResult();
+                .addOrder(Order.asc("date")).addOrder(Order.asc("id"))
+                .setMaxResults(1).uniqueResult();
         if (nextRelease != null) {
             return findWithClassesById(nextRelease.getId());
         }

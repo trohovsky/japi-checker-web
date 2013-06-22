@@ -6,20 +6,20 @@ import org.fedoraproject.japi.checker.web.model.Release;
 
 public interface ReleaseDAO {
 
-	public void save(Release release);
+    public void save(Release release);
 
-	public List<Release> findAll();
+    public List<Release> findByLibraryId(int libraryId);
 
-	public Release findById(int id);
+    public Release findById(int id);
 
-	public Release findWithClassesById(int id);
-	
-	public Release findPrevious(Release release);
-	
-	public Release findNext(Release release);
+    public Release findWithClassesById(int id);
 
-	public List<Release> findByName(String name);
+    public Release findPrevious(Release release);
 
-	public void delete(Release release);
+    public Release findNext(Release release);
+
+    public List<Release> findByName(String name);
+
+    public void delete(Release release);
 
 }

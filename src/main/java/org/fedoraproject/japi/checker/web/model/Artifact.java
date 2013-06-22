@@ -2,7 +2,7 @@ package org.fedoraproject.japi.checker.web.model;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.fedoraproject.japi.checker.web.utils.ArtifactDataHandler;
@@ -15,7 +15,7 @@ public class Artifact {
 
     private String groupId;
     private String artifactId;
-    private List<ArtifactVersion> versions = new ArrayList<ArtifactVersion>();
+    private List<ArtifactVersion> versions = new LinkedList<ArtifactVersion>();
 
     public Artifact(String groupId, String artifactId) {
         this.groupId = groupId;
@@ -67,6 +67,7 @@ public class Artifact {
     }
 
     public void addVersion(ArtifactVersion version) {
-        this.versions.add(version);
+        // pushing ensures correct ordering, i.e. from the oldest to the newest version
+        ((LinkedList<ArtifactVersion>)this.versions).push(version);
     }
 }

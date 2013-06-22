@@ -38,16 +38,16 @@ public class CheckerController {
     public String showLibraryCompatibility(@PathVariable("libraryId") int libraryId, Model model) {
         
         // checking form initialization
-        Library library = this.checkerService.findLibraryWithReleasesById(libraryId);
-        this.initCheckingForm(library.getReleases(), model);
+        List<Release> releases = this.checkerService.findReleasesByLibraryId(libraryId);
+        this.initCheckingForm(releases, model);
         
-        if (!library.getReleases().isEmpty()) {  
+        if (!releases.isEmpty()) {  
             // getting of comparisons
-            List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByLibrary(library);
+            List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByReleases(releases);
             
             // add dummy comparison with initial release
             ReleasesComparison initialComparison = new ReleasesComparison();
-            Release initialRelease = library.getReleases().get(library.getReleases().size() - 1);
+            Release initialRelease = releases.get(releases.size() - 1);
             initialComparison.setNewRelease(initialRelease);
             comparisons.add(initialComparison);
             

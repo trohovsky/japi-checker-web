@@ -149,9 +149,14 @@ public class CheckerServiceImpl implements CheckerService {
 	
     @Transactional
     public void saveReleaseWithComparison(Release release) throws DataAccessException {
-        releaseDAO.save(release);
+        // strategy where comparisons with all previous versions are stored
+        // TODO rework previusRelease and nextRelease to return lists 
+        // and implement the strategy with the same code as follows 
+        
+        // strategy where comparison with previous version is stored
         Release previousRelease = releaseDAO.findPrevious(release);
         Release nextRelease = releaseDAO.findNext(release);
+        releaseDAO.save(release);
         // create the comparison with the previous release
         if (previousRelease != null) {
             ReleasesComparison comparison = checkBackwardCompatibility(previousRelease, release);
@@ -166,6 +171,11 @@ public class CheckerServiceImpl implements CheckerService {
         if (previousRelease != null && nextRelease != null) {
             releasesComparisonDAO.delete(previousRelease.getId(), nextRelease.getId());
         }
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Release> findReleasesByLibraryId(int libraryId) throws DataAccessException {
+        return releaseDAO.findByLibraryId(libraryId);
     }
 
     @Transactional(readOnly = true)
@@ -212,10 +222,10 @@ public class CheckerServiceImpl implements CheckerService {
 	}
 
     @Transactional(readOnly = true)
-	public List<ReleasesComparison> findReleasesComparisonsByLibrary(Library library) throws DataAccessException {
+    public List<ReleasesComparison> findReleasesComparisonsByReleases(List<Release> releases) throws DataAccessException {
         List<Integer> ids = new ArrayList<Integer>();
         // get ids
-        for (Release release : library.getReleases()) {
+        for (Release release : releases) {
             ids.add(release.getId());
         }
 

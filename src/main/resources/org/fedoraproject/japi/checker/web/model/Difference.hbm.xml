@@ -16,7 +16,7 @@
             <column name="reference" not-null="true" />
         </property> -->
         <!-- ANY mapping ignores lazy="false" https://hibernate.atlassian.net/browse/HHH-3574 -->
-        <any name="referenceItem" meta-type="string" id-type="int" lazy="true" access="property">
+        <any name="referenceItem" meta-type="string" id-type="int" lazy="true">
             <meta-value value="C" class="org.fedoraproject.japi.checker.web.model.Class"/>            
             <meta-value value="F" class="org.fedoraproject.japi.checker.web.model.Field"/>
             <meta-value value="M" class="org.fedoraproject.japi.checker.web.model.Method"/>
@@ -38,6 +38,9 @@
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">com.googlecode.japi.checker.DifferenceType</param>
             </type>
+        </property>
+        <property name="source" type="string">
+            <column name="source"></column>
         </property>
         <array name="args" table="argument" fetch="select" cascade="save-update, delete" mutable="false">
             <key>
