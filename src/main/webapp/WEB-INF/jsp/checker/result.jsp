@@ -38,14 +38,14 @@
         </div>
     
         <datatables:table id="comparison" data="${comparison.differences}" cdn="true" row="difference" theme="bootstrap2"
-                      cssClass="table table-striped" paginate="false" info="false">
-        <datatables:column title="severity" filterable="true" filterType="select">
+                      cssClass="table table-striped" paginate="false" info="false" autoWidth="false">
+        <datatables:column title="severity" filterable="true" filterType="select"  cssStyle="width: 12%;">
             <c:out value="${difference.severity}"/>
         </datatables:column>
-        <datatables:column title="source" filterable="true">
+        <datatables:column title="source" filterable="true" cssStyle="width: 38%">
             <c:out value="${difference.source}"/>
         </datatables:column>
-        <datatables:column title="message" filterable="true">
+        <datatables:column title="message" filterable="true" cssStyle="width: 50%" sortable="false">
             <c:out value="${difference.message}"/>
         </datatables:column>
     </datatables:table>

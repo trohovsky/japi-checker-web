@@ -2,6 +2,10 @@ h1 {
 	color: #737373;
 }
 
+.container {
+	width: 1000px;
+}
+
 #checker-container {
 	margin: 0 auto;
 	width: 700px;
@@ -10,4 +14,8 @@ h1 {
 #login-container {
 	margin: 0 auto;
 	width: 400px;
+}
+
+.table select, .table input {
+	width: 100%;
 }
