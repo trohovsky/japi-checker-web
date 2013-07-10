@@ -1,7 +1,5 @@
 package org.fedoraproject.japi.checker.web.model;
 
-// Generated Feb 27, 2013 2:23:31 PM by Hibernate Tools 3.4.0.CR1
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -26,110 +24,110 @@ import com.googlecode.japi.checker.utils.AntPatternMatcher;
  */
 public class Release implements java.io.Serializable, ClassDataLoader<Class> {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private Library library;
-	@NotEmpty
-	private String name;
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
-	@NotNull
-	private Date date;
-	private Map<String, Class> classes = new LinkedHashMap<String, Class>();;
+    private static final long serialVersionUID = 1L;
+    private Integer id;
+    private Library library;
+    @NotEmpty
+    private String name;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @NotNull
+    private Date date;
+    private Map<String, Class> classes = new LinkedHashMap<String, Class>();;
 
-	public Release() {
-	}
+    public Release() {
+    }
 
-	public Release(Library library, String name) {
-		this.library = library;
-		this.name = name;
-	}
+    public Release(Library library, String name) {
+        this.library = library;
+        this.name = name;
+    }
 
-	public Integer getId() {
-		return this.id;
-	}
+    public Integer getId() {
+        return this.id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	public boolean isNew() {
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isNew() {
         return (this.id == null);
     }
 
-	public Library getLibrary() {
-		return this.library;
-	}
+    public Library getLibrary() {
+        return this.library;
+    }
 
-	public void setLibrary(Library library) {
-		this.library = library;
-	}
+    public void setLibrary(Library library) {
+        this.library = library;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public Date getDate() {
-		return this.date;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}	
+    public Date getDate() {
+        return this.date;
+    }
 
-	public List<Class> getClasses() {
-		return new ArrayList<Class>(classes.values());
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public void setClasses(Map<String, Class> classes) {
-		this.classes = classes;
-	}
-	
-	protected void read(File file) throws IOException {
-		JarReader<Class> reader;
-        reader = new JarReader<Class>(file, this, Class.class, Field.class, Method.class, TypeParameter.class);
+    public List<Class> getClasses() {
+        return new ArrayList<Class>(classes.values());
+    }
+
+    public void setClasses(Map<String, Class> classes) {
+        this.classes = classes;
+    }
+
+    protected void read(File file) throws IOException {
+        JarReader<Class> reader;
+        reader = new JarReader<Class>(file, this, Class.class, Field.class,
+                Method.class, TypeParameter.class);
         reader.read();
         // convert list to map
         for (Class clazz : reader.getClasses()) {
-        	this.classes.put(clazz.getName(), clazz);
+            this.classes.put(clazz.getName(), clazz);
         }
-	}
+    }
 
-	// TODO this method is useless, try to use read(String file) instead
-	public void read(URI uri) throws IOException {
+    // TODO this method is useless, try to use read(String file) instead
+    public void read(URI uri) throws IOException {
         if ("file".equals(uri.getScheme())) {
             read(new File(uri.getPath()));
         } else {
             throw new IOException("Unsupported scheme: " + uri.getScheme());
-        }		
-	}
+        }
+    }
 
-	public Class fromName(String name) {
-		return this.classes.get(name);
-	}
+    public Class fromName(String name) {
+        return this.classes.get(name);
+    }
 
-	public List<Class> getClasses(URI uri) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<Class> getClasses(URI uri) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public List<Class> getClasses(URI uri,
-			List<AntPatternMatcher> includes,
-			List<AntPatternMatcher> excludes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public String toString() {
-		return this.name;
-	}
+    public List<Class> getClasses(URI uri, List<AntPatternMatcher> includes,
+            List<AntPatternMatcher> excludes) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
     public Scope getVisibilityLimit() {
         return Scope.PROTECTED;

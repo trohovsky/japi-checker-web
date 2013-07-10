@@ -9,7 +9,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 public class Utils {
-    
+
     /**
      * Download the file from URL to specified the file.
      * 

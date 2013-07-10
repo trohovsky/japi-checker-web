@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AccessController {
- 
+
     @RequestMapping(value = "/login")
     public String login(Model model, @RequestParam(required = false) String message) {
         model.addAttribute("message", message);
@@ -30,5 +30,5 @@ public class AccessController {
         String message = "Logout Success!";
         return "redirect:/login?message=" + message;
     }
- 
+
 }

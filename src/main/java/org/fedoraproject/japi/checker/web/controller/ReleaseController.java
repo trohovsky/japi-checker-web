@@ -31,18 +31,19 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @SessionAttributes(types = Release.class)
 public class ReleaseController {
-	
-	private final CheckerService checkerService;
-	private TaskExecutor taskExecutor;
-	private static final String UPLOAD_PATH = "tmpJARs/"; 
 
-	@Autowired
-	public ReleaseController(CheckerService checkerService, TaskExecutor taskExecutor) {
-		this.checkerService = checkerService;
-		this.taskExecutor = taskExecutor;
-		File tmpDir = new File(UPLOAD_PATH);
-		tmpDir.mkdirs();
-	}
+    private final CheckerService checkerService;
+    private TaskExecutor taskExecutor;
+    private static final String UPLOAD_PATH = "tmpJARs/";
+
+    @Autowired
+    public ReleaseController(CheckerService checkerService,
+            TaskExecutor taskExecutor) {
+        this.checkerService = checkerService;
+        this.taskExecutor = taskExecutor;
+        File tmpDir = new File(UPLOAD_PATH);
+        tmpDir.mkdirs();
+    }
 
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
@@ -52,27 +53,27 @@ public class ReleaseController {
         dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(
                 dateFormat, false));
     }
-	
-	@RequestMapping(value = "/admin/libraries/{libraryId}/releases/new", method = RequestMethod.GET)
-    public String initCreationForm(@PathVariable("libraryId") int libraryId, Model model) {
-		Library library = this.checkerService.findLibraryById(libraryId);
+
+    @RequestMapping(value = "/admin/libraries/{libraryId}/releases/new", method = RequestMethod.GET)
+    public String initCreationForm(@PathVariable("libraryId") int libraryId,
+            Model model) {
+        Library library = this.checkerService.findLibraryById(libraryId);
         Release release = new Release();
         release.setLibrary(library);
         model.addAttribute(release);
         return "releases/createOrUpdate";
     }
-	
-    // TODO validation still does not work
+
     @RequestMapping(value = "/admin/libraries/{libraryId}/releases/new", method = RequestMethod.POST)
     public String processCreationForm(@RequestParam("file") MultipartFile file,
             @Valid Release release, BindingResult result, SessionStatus status) {
-    if (result.hasErrors()) {
+        if (result.hasErrors()) {
             return "releases/createOrUpdate";
-        } else {    
-            
+        } else {
+
             // get file name
             String filename = getFilename(file);
-            
+
             if (filename.isEmpty()) {
                 return "releases/createOrUpdate";
             } else {
@@ -80,13 +81,13 @@ public class ReleaseController {
                 try {
                     // save release
                     checkerService.saveRelease(release);
-                    
+
                     // store file temporarily
                     tmpFile.createNewFile();
                     FileOutputStream fos = new FileOutputStream(tmpFile);
                     fos.write(file.getBytes());
                     fos.close();
-                    
+
                     // parse API and update release in thread
                     Thread uploadReleaseTask = new ReleaseCreationTask(release, tmpFile);
                     taskExecutor.execute(uploadReleaseTask);
@@ -102,70 +103,74 @@ public class ReleaseController {
         }
     }
 
-	/**
-	 * It returns filename of MultipartFile.
-	 * @param file
-	 * @return
-	 */
-	private String getFilename(MultipartFile file) {
-		// filename parsing - it is necessary because getOriginalFilename() may return path in Opera, see. API
-		// http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/multipart/MultipartFile.html#transferTo%28java.io.File%29
-		int slashIndex = file.getOriginalFilename().lastIndexOf('/');
-		if (slashIndex == -1) {
-			slashIndex = file.getOriginalFilename().lastIndexOf('\\');
-		}
-		String filename;
-		if (slashIndex == -1) {
-			filename = file.getOriginalFilename();
-		} else {
-			filename = file.getOriginalFilename().substring(slashIndex);
-		}
-		return filename;
-	}
-	
-	/**
-	 * Task class for a creation of release.
-	 */
-	class ReleaseCreationTask extends Thread {
-		private Release release;
-		private File tmpFile;
-		
-		public ReleaseCreationTask(Release release, File tmpFile) {
-			this.release = release;
-			this.tmpFile = tmpFile;
-		}
-		
-		@Override
-		public void run() {
-			
-			// parse API
-			//long parsingStart = System.nanoTime();
-			checkerService.parseAPI(release, tmpFile);
-			//double parsingDuration = (System.nanoTime() - parsingStart) * 1.0e-9;
-			
-			// store release
-			//long savingStart = System.nanoTime();
-			checkerService.saveReleaseWithComparison(release);
-			//double savingDuration = (System.nanoTime() - savingStart) * 1.0e-9;
-			
-			//System.out.println("parsing of API: " + parsingDuration);
-			//System.out.println("saving of API: " + savingDuration);
-			
-			// remove temporary file
-			tmpFile.delete();
+    /**
+     * It returns filename of MultipartFile.
+     * 
+     * @param file
+     * @return
+     */
+    private String getFilename(MultipartFile file) {
+        // filename parsing - it is necessary because getOriginalFilename() may return path in Opera, see. API
+        // http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/multipart/MultipartFile.html#transferTo%28java.io.File%29
+        int slashIndex = file.getOriginalFilename().lastIndexOf('/');
+        if (slashIndex == -1) {
+            slashIndex = file.getOriginalFilename().lastIndexOf('\\');
+        }
+        String filename;
+        if (slashIndex == -1) {
+            filename = file.getOriginalFilename();
+        } else {
+            filename = file.getOriginalFilename().substring(slashIndex);
+        }
+        return filename;
+    }
 
-		}
-	}
+    /**
+     * Task class for a creation of release.
+     */
+    class ReleaseCreationTask extends Thread {
+        private Release release;
+        private File tmpFile;
+
+        public ReleaseCreationTask(Release release, File tmpFile) {
+            this.release = release;
+            this.tmpFile = tmpFile;
+        }
+
+        @Override
+        public void run() {
+
+            // parse API
+            // long parsingStart = System.nanoTime();
+            checkerService.parseAPI(release, tmpFile);
+            // double parsingDuration = (System.nanoTime() - parsingStart) * 1.0e-9;
+
+            // store release
+            // long savingStart = System.nanoTime();
+            checkerService.saveReleaseWithComparison(release);
+            // double savingDuration = (System.nanoTime() - savingStart) * 1.0e-9;
+
+            // System.out.println("parsing of API: " + parsingDuration);
+            // System.out.println("saving of API: " + savingDuration);
+
+            // remove temporary file
+            tmpFile.delete();
+
+        }
+    }
 
     @RequestMapping(value = "/admin/libraries/*/releases/{releaseId}/edit", method = RequestMethod.GET)
-    public String initUpdateForm(@PathVariable("releaseId") int releaseId, Model model) {
+    public String initUpdateForm(@PathVariable("releaseId") int releaseId,
+            Model model) {
         Release release = this.checkerService.findReleaseById(releaseId);
         model.addAttribute(release);
         return "releases/createOrUpdate";
     }
 
-    @RequestMapping(value = "/admin/libraries/{libraryId}/releases/{releaseId}/edit", method = {RequestMethod.PUT, RequestMethod.POST})
-    public String processUpdateForm(@Valid Release release, BindingResult result, SessionStatus status) {
+    @RequestMapping(value = "/admin/libraries/{libraryId}/releases/{releaseId}/edit", method = {
+            RequestMethod.PUT, RequestMethod.POST })
+    public String processUpdateForm(@Valid Release release,
+            BindingResult result, SessionStatus status) {
         if (result.hasErrors()) {
             return "releases/createOrUpdate";
         } else {
@@ -174,21 +179,21 @@ public class ReleaseController {
             return "redirect:/admin/libraries/{libraryId}/releases/{releaseId}";
         }
     }
-    
-	/**
-	 * Custom handler for displaying an release.
-	 * 
-	 * @param releaseId the ID of the release to display
-	 * @return a ModelMap with the model attributes for the view
-	 */
-	@RequestMapping("/admin/libraries/*/releases/{releaseId}")
+
+    /**
+     * Custom handler for displaying an release.
+     * 
+     * @param releaseId the ID of the release to display
+     * @return a ModelMap with the model attributes for the view
+     */
+    @RequestMapping("/admin/libraries/*/releases/{releaseId}")
     public ModelAndView showRelease(@PathVariable("releaseId") int releaseId) {
         ModelAndView mav = new ModelAndView("releases/details");
         mav.addObject(this.checkerService.findReleaseById(releaseId));
         return mav;
     }
-	
-	@RequestMapping(value = "/admin/libraries/{libraryId}/releases/{releaseId}/delete", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/admin/libraries/{libraryId}/releases/{releaseId}/delete", method = RequestMethod.GET)
     public String delete(@PathVariable("releaseId") int releaseId) {
         Release release = this.checkerService.findReleaseById(releaseId);
         this.checkerService.deleteRelease(release);

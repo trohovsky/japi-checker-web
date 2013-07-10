@@ -16,19 +16,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReleasesComparisonDAOImpl implements ReleasesComparisonDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
-	public void save(ReleasesComparison releasesComparison) {
-		sessionFactory.getCurrentSession().persist(releasesComparison);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<ReleasesComparison> findByReleasesIds(List<Integer> ids) {
+    public void save(ReleasesComparison releasesComparison) {
+        sessionFactory.getCurrentSession().persist(releasesComparison);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<ReleasesComparison> findByReleasesIds(List<Integer> ids) {
         if (ids.size() > 1) {
-            StringBuffer sql = new StringBuffer("select c from ReleasesComparison as c " +
-            		"left join fetch c.referenceRelease r " +
-            		"left join fetch c.newRelease n where");
+            StringBuffer sql = new StringBuffer(
+                    "select c from ReleasesComparison as c "
+                            + "left join fetch c.referenceRelease r "
+                            + "left join fetch c.newRelease n where");
             // comparison between first two releases
             sql.append(" c.referenceRelease.id = ");
             sql.append(ids.get(1));
@@ -48,18 +49,18 @@ public class ReleasesComparisonDAOImpl implements ReleasesComparisonDAO {
         }
 	}
 
-	public ReleasesComparison findByReleasesIds(int referenceId, int newId) {
+    public ReleasesComparison findByReleasesIds(int referenceId, int newId) {
         return (ReleasesComparison) sessionFactory.getCurrentSession()
                 .createCriteria(ReleasesComparison.class)
                 .setFetchMode("differences", FetchMode.JOIN)
                 .add(Restrictions.eq("referenceRelease.id", referenceId))
                 .add(Restrictions.eq("newRelease.id", newId)).uniqueResult();
-	}
+    }
 
     public void delete(int referenceId, int newId) {
         String hql = "delete from ReleasesComparison where referenceRelease.id = :referenceId and newRelease.id = newId";
         sessionFactory.getCurrentSession().createQuery(hql)
                 .setInteger("referenceId", referenceId)
                 .setInteger("newId", newId).executeUpdate();
-	}
+    }
 }

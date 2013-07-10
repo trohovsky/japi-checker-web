@@ -6,12 +6,12 @@ import org.fedoraproject.japi.checker.web.model.ReleasesComparison;
 
 public interface ReleasesComparisonDAO {
 
-	public void save(ReleasesComparison releaseComparison);
+    public void save(ReleasesComparison releaseComparison);
 
-	public List<ReleasesComparison> findByReleasesIds(List<Integer> ids);
+    public List<ReleasesComparison> findByReleasesIds(List<Integer> ids);
 
-	public ReleasesComparison findByReleasesIds(int referenceId, int newId);
+    public ReleasesComparison findByReleasesIds(int referenceId, int newId);
 
-	public void delete(int referenceId, int newId);
+    public void delete(int referenceId, int newId);
 
 }

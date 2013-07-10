@@ -20,40 +20,40 @@ public class ReleaseDAOImpl implements ReleaseDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	// TODO TODO rather use merge
+	// TODO what about using of merge?
 	public void save(Release release) {
 		sessionFactory.getCurrentSession().saveOrUpdate(release);
 	}
 	
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public List<Release> findByLibraryId(int libraryId) {
-         return sessionFactory.getCurrentSession().createCriteria(Release.class)
+        return sessionFactory.getCurrentSession().createCriteria(Release.class)
                 .add(Restrictions.eq("library.id", libraryId))
                 .addOrder(Order.desc("date")).addOrder(Order.desc("id")).list();
     }
 
-	public Release findById(int id) {
-		return (Release) sessionFactory.getCurrentSession().get(Release.class, id);
-	}
-	
-	public Release findWithClassesById(int id) {
-		return (Release) sessionFactory.getCurrentSession()
-				.createCriteria(Release.class)
-				.setFetchMode("classes", FetchMode.JOIN)
-				.add(Restrictions.idEq(id)).uniqueResult(); 
-	}
+    public Release findById(int id) {
+        return (Release) sessionFactory.getCurrentSession().get(Release.class, id);
+    }
+
+    public Release findWithClassesById(int id) {
+        return (Release) sessionFactory.getCurrentSession()
+                .createCriteria(Release.class)
+                .setFetchMode("classes", FetchMode.JOIN)
+                .add(Restrictions.idEq(id)).uniqueResult();
+    }
 
     public Release findPrevious(Release release) {
-	    Release previousRelease = (Release) sessionFactory.getCurrentSession()
-	            .createCriteria(Release.class)
-	            .add(Restrictions.eq("library", release.getLibrary()))
-	            .add(Restrictions.le("date", release.getDate()))
-	            .addOrder(Order.desc("date")).addOrder(Order.desc("id"))
-	            .setMaxResults(1).uniqueResult();
-	    if (previousRelease != null) {
-	        return findWithClassesById(previousRelease.getId());
-	    }
-	    return previousRelease;
+        Release previousRelease = (Release) sessionFactory.getCurrentSession()
+                .createCriteria(Release.class)
+                .add(Restrictions.eq("library", release.getLibrary()))
+                .add(Restrictions.le("date", release.getDate()))
+                .addOrder(Order.desc("date")).addOrder(Order.desc("id"))
+                .setMaxResults(1).uniqueResult();
+        if (previousRelease != null) {
+            return findWithClassesById(previousRelease.getId());
+        }
+        return previousRelease;
     }
 
     public Release findNext(Release release) {
@@ -69,15 +69,16 @@ public class ReleaseDAOImpl implements ReleaseDAO {
         return nextRelease;
     }
 
-	@SuppressWarnings("unchecked")
-	public List<Release> findByName(String name) {
-		Query query = sessionFactory.getCurrentSession().createQuery("from Release rel where rel.name like :name");
-		query.setParameter("name", name);
-		return query.list();
-	}
-	
-	public void delete(Release release) {
-		sessionFactory.getCurrentSession().delete(release);
-	}
+    @SuppressWarnings("unchecked")
+    public List<Release> findByName(String name) {
+        Query query = sessionFactory.getCurrentSession().createQuery(
+                "from Release rel where rel.name like :name");
+        query.setParameter("name", name);
+        return query.list();
+    }
+
+    public void delete(Release release) {
+        sessionFactory.getCurrentSession().delete(release);
+    }
 
 }

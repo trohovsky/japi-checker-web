@@ -19,6 +19,7 @@ public class ArtifactVersion {
 
     /**
      * Return name of artifact version.
+     * 
      * @return
      */
     public String getName() {
@@ -27,6 +28,7 @@ public class ArtifactVersion {
 
     /**
      * Return filename.
+     * 
      * @return
      */
     public String getFileName() {
@@ -35,6 +37,7 @@ public class ArtifactVersion {
 
     /**
      * Download the artifact.
+     * 
      * @param destDir
      * @return artifact file
      */
@@ -46,7 +49,7 @@ public class ArtifactVersion {
         String url = "http://search.maven.org/remotecontent?filepath="
                 + filePath;
         file = new File(destDir + "/" + this.getFileName());
-        //System.out.println("Downloading from " + url);
+        // System.out.println("Downloading from " + url);
         // download
         Utils.downloadFile(url, file);
         return file;

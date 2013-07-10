@@ -68,6 +68,6 @@ public class Artifact {
 
     public void addVersion(ArtifactVersion version) {
         // pushing ensures correct ordering, i.e. from the oldest to the newest version
-        ((LinkedList<ArtifactVersion>)this.versions).push(version);
+        ((LinkedList<ArtifactVersion>) this.versions).push(version);
     }
 }

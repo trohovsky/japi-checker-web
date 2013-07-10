@@ -13,7 +13,7 @@ public class ArtifactDataHandler extends DefaultHandler {
     private ArtifactVersion version;
     private char element;
     private Artifact artifact;
-    
+
     public ArtifactDataHandler(Artifact artifact) {
         this.artifact = artifact;
     }

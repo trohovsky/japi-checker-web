@@ -24,15 +24,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @SessionAttributes(types = Library.class)
 public class LibraryController {
-	
-	private final CheckerService checkerService;
 
-	@Autowired
-	public LibraryController(CheckerService checkerService) {
-		this.checkerService = checkerService;
-	}
-	
-	@InitBinder
+    private final CheckerService checkerService;
+
+    @Autowired
+    public LibraryController(CheckerService checkerService) {
+        this.checkerService = checkerService;
+    }
+
+    @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
     }
@@ -65,7 +65,8 @@ public class LibraryController {
     }
 
     @RequestMapping(value = "/admin/libraries/new", method = RequestMethod.POST)
-    public String processCreationForm(@Valid Library library, BindingResult result, SessionStatus status) {
+    public String processCreationForm(@Valid Library library,
+            BindingResult result, SessionStatus status) {
         if (result.hasErrors()) {
             return "libraries/createOrUpdate";
         } else {
@@ -74,14 +75,14 @@ public class LibraryController {
             return "redirect:/admin/libraries/" + library.getId();
         }
     }
-    
+
     @RequestMapping(value = "/admin/libraries", method = RequestMethod.GET)
     public String showLibraries(Model model) {
-    	Collection<Library> results = this.checkerService.findLibraries();
-    	model.addAttribute("selections", results);
-    	return "libraries/list";
+        Collection<Library> results = this.checkerService.findLibraries();
+        model.addAttribute("selections", results);
+        return "libraries/list";
     }
-    
+
     /*@RequestMapping(value = "/libraries/find", method = RequestMethod.GET)
     public String initFindForm(Model model) {
         model.addAttribute("library", new Library());
@@ -115,14 +116,16 @@ public class LibraryController {
     }*/
 
     @RequestMapping(value = "/admin/libraries/{libraryId}/edit", method = RequestMethod.GET)
-    public String initUpdateForm(@PathVariable("libraryId") int libraryId, Model model) {
+    public String initUpdateForm(@PathVariable("libraryId") int libraryId,
+            Model model) {
         Library library = this.checkerService.findLibraryById(libraryId);
         model.addAttribute(library);
         return "libraries/createOrUpdate";
     }
 
     @RequestMapping(value = "/admin/libraries/{libraryId}/edit", method = RequestMethod.PUT)
-    public String processUpdateForm(@Valid Library library, BindingResult result, SessionStatus status) { 
+    public String processUpdateForm(@Valid Library library,
+            BindingResult result, SessionStatus status) {
         if (result.hasErrors()) {
             return "libraries/createOrUpdate";
         } else {
@@ -132,23 +135,24 @@ public class LibraryController {
         }
     }
 
-	/**
-	 * Custom handler for displaying an library.
-	 * 
-	 * @param libraryId the ID of the library to display
-	 * @return a ModelMap with the model attributes for the view
-	 */
-	@RequestMapping("/admin/libraries/{libraryId}")
+    /**
+     * Custom handler for displaying an library.
+     * 
+     * @param libraryId
+     *            the ID of the library to display
+     * @return a ModelMap with the model attributes for the view
+     */
+    @RequestMapping("/admin/libraries/{libraryId}")
     public ModelAndView showLibrary(@PathVariable("libraryId") int libraryId) {
         ModelAndView mav = new ModelAndView("libraries/details");
         mav.addObject(this.checkerService.findLibraryWithReleasesById(libraryId));
         return mav;
     }
 
-	@RequestMapping(value = "/admin/libraries/{libraryId}/delete", method = RequestMethod.GET)
-	public String delete(@PathVariable("libraryId") int libraryId) {
-	    Library library = this.checkerService.findLibraryById(libraryId);
-	    this.checkerService.deleteLibrary(library);
-	    return "redirect:/admin/libraries";
-	}
+    @RequestMapping(value = "/admin/libraries/{libraryId}/delete", method = RequestMethod.GET)
+    public String delete(@PathVariable("libraryId") int libraryId) {
+        Library library = this.checkerService.findLibraryById(libraryId);
+        this.checkerService.deleteLibrary(library);
+        return "redirect:/admin/libraries";
+    }
 }

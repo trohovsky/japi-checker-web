@@ -1,7 +1,5 @@
 package org.fedoraproject.japi.checker.web.model;
 
-// Generated Feb 27, 2013 2:23:31 PM by Hibernate Tools 3.4.0.CR1
-
 import com.googlecode.japi.checker.ClassDataLoader;
 import com.googlecode.japi.checker.model.ClassData;
 
@@ -10,27 +8,29 @@ import com.googlecode.japi.checker.model.ClassData;
  */
 public class Class extends ClassData implements java.io.Serializable {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private int id;
-	// private Set<Class> classes = new HashSet<Class>(0); // TODO inner classes
+    private static final long serialVersionUID = 1L;
+    private int id;
 
-	public Class() {
-		super();
-	}
-	
-    public Class(ClassDataLoader<?> loader, ClassData owner, int access, String name, String superName, String[] interfaces, int version) { 
+    // private Set<Class> classes = new HashSet<Class>(0); // TODO inner classes
+
+    public Class() {
+        super();
+    }
+
+    public Class(ClassDataLoader<?> loader, ClassData owner, int access,
+            String name, String superName, String[] interfaces, int version) {
         super(loader, owner, access, name, superName, interfaces, version);
     }
 
-	public int getId() {
-		return this.id;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
 }

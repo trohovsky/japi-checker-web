@@ -1,7 +1,5 @@
 package org.fedoraproject.japi.checker.web.model;
 
-// Generated Feb 27, 2013 2:23:31 PM by Hibernate Tools 3.4.0.CR1
-
 import com.googlecode.japi.checker.model.ClassData;
 import com.googlecode.japi.checker.model.MethodData;
 
@@ -10,24 +8,25 @@ import com.googlecode.japi.checker.model.MethodData;
  */
 public class Method extends MethodData implements java.io.Serializable {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private int id;
+    private static final long serialVersionUID = 1L;
+    private int id;
 
-	public Method() {
-	}
-	
-    public Method(ClassData owner, int access, String name, String descriptor, String[] exceptions) {
+    public Method() {
+    }
+
+    public Method(ClassData owner, int access, String name, String descriptor,
+            String[] exceptions) {
         super(owner, access, name, descriptor, exceptions);
     }
 
-	public int getId() {
-		return this.id;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 }

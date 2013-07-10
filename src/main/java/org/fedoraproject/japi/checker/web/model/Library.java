@@ -1,7 +1,5 @@
 package org.fedoraproject.japi.checker.web.model;
 
-// Generated Feb 27, 2013 2:23:31 PM by Hibernate Tools 3.4.0.CR1
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,44 +10,44 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class Library implements java.io.Serializable {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-	@NotEmpty
-	private String name;
-	private List<Release> releases = new ArrayList<Release>(0);
+    private static final long serialVersionUID = 1L;
+    private Integer id;
+    @NotEmpty
+    private String name;
+    private List<Release> releases = new ArrayList<Release>(0);
 
-	public Library() {
-	}
+    public Library() {
+    }
 
-	public Integer getId() {
-		return this.id;
-	}
+    public Integer getId() {
+        return this.id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	public boolean isNew() {
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isNew() {
         return (this.id == null);
     }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public List<Release> getReleases() {
-		return this.releases;
-	}
+    public List<Release> getReleases() {
+        return this.releases;
+    }
 
-	public void setReleases(List<Release> releases) {
-		this.releases = releases;
-	}
+    public void setReleases(List<Release> releases) {
+        this.releases = releases;
+    }
 
 }

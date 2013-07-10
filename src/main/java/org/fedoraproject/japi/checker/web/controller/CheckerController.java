@@ -20,12 +20,12 @@ import org.springframework.web.bind.support.SessionStatus;
 @Controller
 public class CheckerController {
 
-	private final CheckerService checkerService;
+    private final CheckerService checkerService;
 
-	@Autowired
-	public CheckerController(CheckerService checkerService) {
-		this.checkerService = checkerService;
-	}
+    @Autowired
+    public CheckerController(CheckerService checkerService) {
+        this.checkerService = checkerService;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showLibraries(Model model) {
@@ -33,29 +33,30 @@ public class CheckerController {
         model.addAttribute("libraries", results);
         return "checker/libraries";
     }
-	
+
     @RequestMapping(value = "/{libraryId}/releases", method = RequestMethod.GET)
-    public String showLibraryCompatibility(@PathVariable("libraryId") int libraryId, Model model) {
-        
+    public String showLibraryCompatibility(
+            @PathVariable("libraryId") int libraryId, Model model) {
+
         // checking form initialization
         List<Release> releases = this.checkerService.findReleasesByLibraryId(libraryId);
         this.initCheckingForm(releases, model);
-        
-        if (!releases.isEmpty()) {  
+
+        if (!releases.isEmpty()) {
             // getting of comparisons
             List<ReleasesComparison> comparisons = this.checkerService.findReleasesComparisonsByReleases(releases);
-            
+
             // add dummy comparison with initial release
             ReleasesComparison initialComparison = new ReleasesComparison();
             Release initialRelease = releases.get(releases.size() - 1);
             initialComparison.setNewRelease(initialRelease);
             comparisons.add(initialComparison);
-            
+
             model.addAttribute("comparisons", comparisons);
         }
         return "checker/comparisons";
     }
-    
+
     private void initCheckingForm(List<Release> releases, Model model) {
         model.addAttribute("reference", releases);
         model.addAttribute("newRelease", releases);
@@ -85,17 +86,16 @@ public class CheckerController {
         model.addAttribute("comparison", comparison);
         model.addAttribute("referenceRelease", referenceRelease);
         model.addAttribute("newRelease", newRelease);
-    }   
+    }
 
     @RequestMapping(value = "/{libraryId}/releases/{referenceId}-{newId}", method = RequestMethod.GET)
     public String showReleasesComparison(
             @PathVariable("referenceId") int referenceId,
             @PathVariable("newId") int newId, Model model) {
-        
+
         showComparison(model, referenceId, newId);
 
         return "checker/result";
-
     }
 
 }

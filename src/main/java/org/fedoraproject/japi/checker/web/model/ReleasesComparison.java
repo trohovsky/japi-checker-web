@@ -1,7 +1,5 @@
 package org.fedoraproject.japi.checker.web.model;
 
-// Generated Feb 27, 2013 2:23:31 PM by Hibernate Tools 3.4.0.CR1
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,55 +13,54 @@ import com.googlecode.japi.checker.model.JavaItem;
  */
 public class ReleasesComparison implements java.io.Serializable, Reporter {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private Release referenceRelease;
-	private Release newRelease;
-	private Integer errorCount; // binary or source breakage with ERROR severity
+    private static final long serialVersionUID = 1L;
+    private Integer id;
+    private Release referenceRelease;
+    private Release newRelease;
+    private Integer errorCount; // binary or source breakage with ERROR severity
     private Integer warningCount; // binary or source breakage with WARRNING severity
-	private List<Difference> differences = new ArrayList<Difference>(0);
+    private List<Difference> differences = new ArrayList<Difference>(0);
 
-	public ReleasesComparison() {
-	}
+    public ReleasesComparison() {
+    }
 
-	public ReleasesComparison(Release referenceRelease,
-			Release newRelease) {
-		this.referenceRelease = referenceRelease;
-		this.newRelease = newRelease;
-	}
+    public ReleasesComparison(Release referenceRelease, Release newRelease) {
+        this.referenceRelease = referenceRelease;
+        this.newRelease = newRelease;
+    }
 
-	public Integer getId() {
-		return this.id;
-	}
+    public Integer getId() {
+        return this.id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	public boolean isNew() {
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isNew() {
         return (this.id == null);
     }
 
-	public Release getReferenceRelease() {
-		return referenceRelease;
-	}
+    public Release getReferenceRelease() {
+        return referenceRelease;
+    }
 
-	public void setReferenceRelease(Release referenceRelease) {
-		this.referenceRelease = referenceRelease;
-	}
+    public void setReferenceRelease(Release referenceRelease) {
+        this.referenceRelease = referenceRelease;
+    }
 
-	public Release getNewRelease() {
-		return newRelease;
-	}
+    public Release getNewRelease() {
+        return newRelease;
+    }
 
-	public void setNewRelease(Release newRelease) {
-		this.newRelease = newRelease;
-	}
-	
-	public Integer getErrorCount() {
+    public void setNewRelease(Release newRelease) {
+        this.newRelease = newRelease;
+    }
+
+    public Integer getErrorCount() {
         return errorCount;
     }
 
@@ -79,52 +76,56 @@ public class ReleasesComparison implements java.io.Serializable, Reporter {
         this.warningCount = warningCount;
     }
 
-	/**
-	 * Occurrence of binary or source breakage with ERROR severity.
-	 * @return
-	 */
-	public boolean isCompatible() {
-	    return getErrorCount() == 0;
-	}
+    /**
+     * Occurrence of binary or source breakage with ERROR severity.
+     * 
+     * @return
+     */
+    public boolean isCompatible() {
+        return getErrorCount() == 0;
+    }
 
-	public List<Difference> getDifferences() {
-		return this.differences;
-	}
+    public List<Difference> getDifferences() {
+        return this.differences;
+    }
 
-	public void setDifferences(List<Difference> differences) {
-		this.differences = differences;
-	}
+    public void setDifferences(List<Difference> differences) {
+        this.differences = differences;
+    }
 
-	public void report(com.googlecode.japi.checker.Difference difference) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void report(com.googlecode.japi.checker.Difference difference) {
+        // TODO Auto-generated method stub
 
-	public void report(JavaItem referenceItem, JavaItem newItem,
-			DifferenceType differenceType, Object... args) {
-		Difference difference = new Difference(this, referenceItem, newItem, differenceType, args);
-		differences.add(difference);		
-	}
-	
-	/**
-	 * It returns count of differences of specified severity and level of compatibility.
-	 * @param severity
-	 * @param reportSourceIncompatibilities
-	 * @return count of differences of specified severity and level of compatibility
-	 */
-	public int getDifferencesCount(Severity severity, boolean reportSourceIncompatibilities) {
-		if (severity == null && reportSourceIncompatibilities) {
-			return differences.size();
-		} else {
-			int count = 0;
-			for (Difference difference : differences) {
-				if (difference.getSeverity() == severity) {
-					if (reportSourceIncompatibilities || !difference.isSourceIncompatible()) {
-	            		count++;
-	            	}
-				}		
-			}
-			return count;
-		}
-	}
+    }
+
+    public void report(JavaItem referenceItem, JavaItem newItem,
+            DifferenceType differenceType, Object... args) {
+        Difference difference = new Difference(this, referenceItem, newItem,
+                differenceType, args);
+        differences.add(difference);
+    }
+
+    /**
+     * It returns count of differences of specified severity and level of compatibility.
+     * 
+     * @param severity
+     * @param reportSourceIncompatibilities
+     * @return count of differences of specified severity and level of compatibility
+     */
+    public int getDifferencesCount(Severity severity, boolean reportSourceIncompatibilities) {
+        if (severity == null && reportSourceIncompatibilities) {
+            return differences.size();
+        } else {
+            int count = 0;
+            for (Difference difference : differences) {
+                if (difference.getSeverity() == severity) {
+                    if (reportSourceIncompatibilities
+                            || !difference.isSourceIncompatible()) {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+    }
 }
