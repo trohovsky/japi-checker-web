@@ -39,13 +39,23 @@
     
         <datatables:table id="comparison" data="${comparison.differences}" cdn="true" row="difference" theme="bootstrap2"
                       cssClass="table table-striped" paginate="false" info="false" autoWidth="false">
-        <datatables:column title="severity" filterable="true" filterType="select"  cssStyle="width: 12%;">
+        <datatables:column title="severity" filterable="true" filterType="select"  cssStyle="width: 15%;">
             <c:out value="${difference.severity}"/>
         </datatables:column>
-        <datatables:column title="source" filterable="true" cssStyle="width: 38%">
+                <datatables:column title="breaks" filterable="true" filterType="select"  cssStyle="width: 15%;">
+        	<c:choose>
+        		<c:when test="${difference.isSourceIncompatible()}">
+        			<c:out value="SOURCE"/>
+        		</c:when>
+        		<c:otherwise>
+        			<c:out value="BOTH"></c:out>
+        		</c:otherwise>
+        	</c:choose>
+        </datatables:column> 
+        <datatables:column title="source" filterable="true" cssStyle="width: 30%">
             <c:out value="${difference.source}"/>
         </datatables:column>
-        <datatables:column title="message" filterable="true" cssStyle="width: 50%" sortable="false">
+        <datatables:column title="message" filterable="true" cssStyle="width: 40%" sortable="false">
             <c:out value="${difference.message}"/>
         </datatables:column>
     </datatables:table>
